@@ -37,8 +37,7 @@
                             <option value="<?= $s['id']; ?>"><?= $s['nis']; ?> - <?= $s['nama_siswa']; ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <input type="number" name="nomor_urut" placeholder="No Urut" class="w-20 px-3 py-2 border border-slate-300 rounded-md">
-                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">Tambah</button>
+                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition font-medium">Tambah & Urutkan</button>
                 </form>
             </div>
 

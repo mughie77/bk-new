@@ -19,14 +19,14 @@ class Mapping extends Controller {
 
     public function tambah_siswa() {
         if ($this->model('Mapping_model')->tambahMappingSiswa($_POST)) {
-            $_SESSION['flash'] = ['pesan' => 'Siswa berhasil dimasukkan ke kelas', 'tipe' => 'success'];
+            $_SESSION['flash'] = ['pesan' => 'Siswa berhasil dimasukkan dan nomor urut diatur ulang', 'tipe' => 'success'];
         }
         $this->redirect('mapping/siswa/' . $_POST['kelas_id']);
     }
 
     public function hapus_siswa($id, $kelas_id) {
-        if ($this->model('Mapping_model')->hapusMappingSiswa($id)) {
-            $_SESSION['flash'] = ['pesan' => 'Siswa berhasil dikeluarkan dari kelas', 'tipe' => 'success'];
+        if ($this->model('Mapping_model')->hapusMappingSiswa($id, $kelas_id)) {
+            $_SESSION['flash'] = ['pesan' => 'Siswa berhasil dikeluarkan dan nomor urut diatur ulang', 'tipe' => 'success'];
         }
         $this->redirect('mapping/siswa/' . $kelas_id);
     }
