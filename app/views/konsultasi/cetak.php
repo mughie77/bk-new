@@ -22,9 +22,12 @@
     </div>
 
     <!-- Header / Kop Surat -->
-    <?php if(!empty($data['pengaturan']['kop_surat']) && file_exists(BASEPATH . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . $data['pengaturan']['kop_surat'])): ?>
+    <?php
+    $kop_path = BASEPATH . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . $data['pengaturan']['kop_surat'];
+    if(!empty($data['pengaturan']['kop_surat']) && file_exists($kop_path)):
+    ?>
         <div class="mb-6">
-            <img src="<?= BASEURL; ?>/uploads/<?= $data['pengaturan']['kop_surat']; ?>" class="w-full h-auto">
+            <img src="<?= BASEURL; ?>/uploads/<?= $data['pengaturan']['kop_surat']; ?>" class="w-full h-auto max-h-32 object-contain">
         </div>
     <?php else: ?>
         <div class="border-b-4 border-black pb-2 mb-6 flex items-center">

@@ -18,6 +18,7 @@ class Pengaturan extends Controller {
     public function update() {
         $file = $_FILES['kop_surat'];
         $upload_ok = true;
+        $file_name = null;
 
         if ($file['name']) {
             $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
@@ -25,15 +26,33 @@ class Pengaturan extends Controller {
                 $_SESSION['flash'] = ['pesan' => 'Ekstensi file kop surat tidak valid (Hanya .jpg, .png)', 'tipe' => 'danger'];
                 $upload_ok = false;
             } else {
-                move_uploaded_file($file['tmp_name'], '../public/uploads/' . $file['name']);
+                // Gunakan path absolut BASEPATH untuk upload
+                $upload_dir = BASEPATH . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'uploads';
+
+                // Buat folder jika belum ada
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                }
+
+                // Beri nama unik agar tidak cache dan tidak bentrok
+                $file_name = 'kop_' . time() . '.' . $ext;
+                $target_path = $upload_dir . DIRECTORY_SEPARATOR . $file_name;
+
+                if (!move_uploaded_file($file['tmp_name'], $target_path)) {
+                    $_SESSION['flash'] = ['pesan' => 'Gagal mengupload file ke server.', 'tipe' => 'danger'];
+                    $upload_ok = false;
+                } else {
+                    // Update data dengan nama file baru
+                    $file['name'] = $file_name;
+                }
             }
         }
 
         if ($upload_ok) {
-            if ($this->model('Pengaturan_model')->updatePengaturan($_POST, $file)) {
+            if ($this->model('Pengaturan_model')->updatePengaturan($_POST, $file['name'] ? $file : null)) {
                 $_SESSION['flash'] = ['pesan' => 'Pengaturan berhasil diperbarui', 'tipe' => 'success'];
             } else {
-                $_SESSION['flash'] = ['pesan' => 'Gagal memperbarui pengaturan', 'tipe' => 'danger'];
+                $_SESSION['flash'] = ['pesan' => 'Gagal memperbarui database pengaturan', 'tipe' => 'danger'];
             }
         }
 
@@ -89,9 +108,6 @@ class Pengaturan extends Controller {
         }
 
         $commands[] = "cd /d \"$base\" && git fetch --all";
-
-        // Coba deteksi branch master atau main
-        // Gunakan perintah untuk mendapatkan branch default dari remote
         $commands[] = "cd /d \"$base\" && git remote set-head origin -a";
         $commands[] = "cd /d \"$base\" && git reset --hard origin/HEAD";
 
@@ -103,7 +119,6 @@ class Pengaturan extends Controller {
             exec($cmd . " 2>&1", $cmd_output, $result_code);
             $full_output .= "> " . $cmd . "\n" . implode("\n", $cmd_output) . "\n\n";
 
-            // Kami mengabaikan kegagalan safe.directory dan set-head origin -a jika HEAD sudah ada
             if ($result_code !== 0) {
                 if (strpos($cmd, 'safe.directory') === false && strpos($cmd, 'set-head') === false) {
                     $is_success = false;
