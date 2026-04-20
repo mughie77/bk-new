@@ -65,34 +65,51 @@ class Pengaturan extends Controller {
         }
 
         $base = BASEPATH;
+        $output_log = [];
+        $return_var = 0;
 
         // Cek apakah Git terinstal
         $git_check = shell_exec("git --version");
         if (!$git_check) {
-            $_SESSION['flash'] = ['pesan' => 'Gagal: Git tidak ditemukan di server. Pastikan Git sudah terinstal dan masuk ke Environment Path.', 'tipe' => 'danger'];
+            $_SESSION['cli_output'] = [
+                'command' => 'git --version',
+                'output' => 'Git tidak ditemukan di server. Pastikan Git sudah terinstal dan masuk ke Environment Path.',
+                'status' => 'error'
+            ];
             $this->redirect('pengaturan');
         }
 
-        // Jika bukan repo git, inisialisasi otomatis
+        // Jalankan serangkaian perintah
+        $commands = [];
+
+        // Pastikan direktori aman (sering jadi masalah di Windows/XAMPP)
+        $commands[] = "git config --global --add safe.directory \"$base\"";
+
         if (!is_dir($base . DIRECTORY_SEPARATOR . '.git')) {
-            $init_command = "cd /d \"$base\" && git init && git remote add origin " . GIT_URL . " 2>&1";
-            shell_exec($init_command);
+            $commands[] = "cd /d \"$base\" && git init";
+            $commands[] = "cd /d \"$base\" && git remote add origin " . GIT_URL;
         }
 
-        // Perintah git update
-        // Menggunakan git fetch dan reset hard untuk menjamin sinkronisasi
-        $command = "cd /d \"$base\" && git fetch --all && git reset --hard origin/master 2>&1";
-        $output = shell_exec($command);
+        $commands[] = "cd /d \"$base\" && git fetch --all";
+        $commands[] = "cd /d \"$base\" && git reset --hard origin/master";
 
-        if ($output) {
-            $is_success = (strpos($output, 'HEAD is now at') !== false || strpos($output, 'Already up to date') !== false);
-            $_SESSION['flash'] = [
-                'pesan' => 'Log Update: ' . $output,
-                'tipe' => $is_success ? 'success' : 'danger'
-            ];
-        } else {
-            $_SESSION['flash'] = ['pesan' => 'Gagal menjalankan perintah update. Periksa koneksi internet atau izin folder.', 'tipe' => 'danger'];
+        $full_output = "";
+        $is_success = true;
+
+        foreach ($commands as $cmd) {
+            $cmd_output = [];
+            exec($cmd . " 2>&1", $cmd_output, $result_code);
+            $full_output .= "> " . $cmd . "\n" . implode("\n", $cmd_output) . "\n\n";
+            if ($result_code !== 0 && strpos($cmd, 'safe.directory') === false) {
+                $is_success = false;
+            }
         }
+
+        $_SESSION['cli_output'] = [
+            'command' => "Multi-step Git Update",
+            'output' => $full_output,
+            'status' => $is_success ? 'success' : 'error'
+        ];
 
         $this->redirect('pengaturan');
     }

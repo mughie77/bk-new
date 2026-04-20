@@ -10,6 +10,33 @@
     </div>
 <?php endif; ?>
 
+<!-- Popup CLI Output -->
+<?php if(isset($_SESSION['cli_output'])) : ?>
+    <div id="cli-modal" class="fixed inset-0 bg-slate-900 bg-opacity-75 flex items-center justify-center z-[100] p-4">
+        <div class="bg-slate-900 text-emerald-400 font-mono text-xs w-full max-w-3xl rounded-lg shadow-2xl border border-slate-700 overflow-hidden flex flex-col max-h-[80vh]">
+            <div class="bg-slate-800 px-4 py-2 flex justify-between items-center border-b border-slate-700">
+                <div class="flex items-center space-x-2">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                    <span class="ml-2 text-slate-400">Terminal Output - <?= $_SESSION['cli_output']['status'] == 'success' ? 'Berhasil' : 'Error' ?></span>
+                </div>
+                <button onclick="document.getElementById('cli-modal').remove()" class="text-slate-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4 overflow-y-auto whitespace-pre-wrap">
+                <span class="text-slate-500"># Command: <?= $_SESSION['cli_output']['command']; ?></span>
+                <div class="mt-2"><?= htmlspecialchars($_SESSION['cli_output']['output']); ?></div>
+            </div>
+            <div class="bg-slate-800 p-4 border-t border-slate-700 flex justify-end">
+                <button onclick="document.getElementById('cli-modal').remove()" class="px-4 py-1 bg-slate-700 text-slate-200 rounded hover:bg-slate-600 transition">Tutup Terminal</button>
+            </div>
+        </div>
+    </div>
+    <?php unset($_SESSION['cli_output']); ?>
+<?php endif; ?>
+
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     <!-- Form Pengaturan Sekolah -->
     <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
