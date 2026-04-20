@@ -43,7 +43,7 @@ class Pengaturan_model {
 
     public function updateDb() {
         // Lokasi schema.sql dipindahkan ke config/
-        $file_path = BASEPATH . '/config/schema.sql';
+        $file_path = BASEPATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'schema.sql';
         if (!file_exists($file_path)) return false;
 
         $sql = file_get_contents($file_path);

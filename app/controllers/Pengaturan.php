@@ -66,7 +66,7 @@ class Pengaturan extends Controller {
         }
 
         // Jika bukan repo git, inisialisasi otomatis
-        if (!is_dir(BASEPATH . '/.git')) {
+        if (!is_dir(BASEPATH . DIRECTORY_SEPARATOR . '.git')) {
             $init_command = "cd " . BASEPATH . " && git init && git remote add origin " . GIT_URL . " 2>&1";
             shell_exec($init_command);
         }
@@ -96,7 +96,8 @@ class Pengaturan extends Controller {
         if ($this->model('Pengaturan_model')->updateDb()) {
             $_SESSION['flash'] = ['pesan' => 'Skema database berhasil diperbarui (Update DB Berhasil)', 'tipe' => 'success'];
         } else {
-            $_SESSION['flash'] = ['pesan' => 'Gagal memperbarui skema database (Path: '.BASEPATH.'/config/schema.sql). Pastikan file schema.sql tersedia.', 'tipe' => 'danger'];
+            $path_err = BASEPATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'schema.sql';
+            $_SESSION['flash'] = ['pesan' => 'Gagal memperbarui skema database (Path: '.$path_err.'). Pastikan file schema.sql tersedia.', 'tipe' => 'danger'];
         }
         $this->redirect('pengaturan');
     }

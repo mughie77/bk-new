@@ -2,11 +2,12 @@
 
 if (!session_id()) session_start();
 
-define('BASEPATH', dirname(__DIR__));
+// Normalisasi path agar kompatibel dengan Windows (XAMPP) dan Linux
+define('BASEPATH', str_replace(['/', '\\'], DIRECTORY_SEPARATOR, dirname(__DIR__)));
 
-require_once '../app/core/App.php';
-require_once '../app/core/Controller.php';
-require_once '../app/core/Database.php';
-require_once '../config/config.php';
+require_once '..' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'App.php';
+require_once '..' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Controller.php';
+require_once '..' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Database.php';
+require_once '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.php';
 
 $app = new App();

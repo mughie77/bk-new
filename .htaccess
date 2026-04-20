@@ -1,0 +1,12 @@
+Options -Indexes
+
+RewriteEngine On
+
+# Arahkan semua permintaan ke folder public
+RewriteRule ^$ public/index.php [L]
+RewriteRule ^((?!public/).*)$ public/$1 [L]
+
+# Aturan rewrite internal di dalam folder public
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^public/(.*)$ public/index.php?url=$1 [L,QSA]
