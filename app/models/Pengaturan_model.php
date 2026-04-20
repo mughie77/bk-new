@@ -42,17 +42,11 @@ class Pengaturan_model {
     }
 
     public function updateDb() {
-        // Lokasi schema.sql dipindahkan ke config/
-        $file_path = BASEPATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'schema.sql';
-        if (!file_exists($file_path)) return false;
+        require_once BASEPATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'update_db.php';
+        $schema_path = BASEPATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'schema.sql';
 
-        $sql = file_get_contents($file_path);
-        try {
-            $this->db->getDbh()->exec($sql);
-            return true;
-        } catch (PDOException $e) {
-            return false;
-        }
+        $result = jalankanUpdateDatabase($this->db->getDbh(), $schema_path);
+        return $result;
     }
 
     // Konsentrasi Keahlian

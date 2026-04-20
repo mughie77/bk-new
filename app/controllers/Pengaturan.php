@@ -65,23 +65,26 @@ class Pengaturan extends Controller {
             $this->redirect('pengaturan');
         }
 
-        // Jika bukan repo git, inisialisasi otomatis
-        if (!is_dir(BASEPATH . DIRECTORY_SEPARATOR . '.git')) {
-            $init_command = "cd " . BASEPATH . " && git init && git remote add origin " . GIT_URL . " 2>&1";
+        $base = BASEPATH;
+
+        // Cek dan inisialisasi Git jika perlu
+        if (!is_dir($base . DIRECTORY_SEPARATOR . '.git')) {
+            $init_command = "cd /d \"$base\" && git init && git remote add origin " . GIT_URL . " 2>&1";
             shell_exec($init_command);
         }
 
-        // Perintah git pull
-        $command = "cd " . BASEPATH . " && git fetch --all && git reset --hard origin/master 2>&1";
+        // Perintah git pull dengan tanda kutip untuk path Windows
+        $command = "cd /d \"$base\" && git fetch --all && git reset --hard origin/master 2>&1";
         $output = shell_exec($command);
 
         if ($output) {
+            $is_success = (strpos($output, 'HEAD is now at') !== false || strpos($output, 'Already up to date') !== false);
             $_SESSION['flash'] = [
                 'pesan' => 'Log Update: ' . $output,
-                'tipe' => (strpos($output, 'HEAD is now at') !== false || strpos($output, 'Already up to date') !== false) ? 'success' : 'danger'
+                'tipe' => $is_success ? 'success' : 'danger'
             ];
         } else {
-            $_SESSION['flash'] = ['pesan' => 'Gagal menjalankan perintah update.', 'tipe' => 'danger'];
+            $_SESSION['flash'] = ['pesan' => 'Gagal menjalankan perintah update. Pastikan Git terinstal di server dan path benar.', 'tipe' => 'danger'];
         }
 
         $this->redirect('pengaturan');
@@ -93,11 +96,12 @@ class Pengaturan extends Controller {
             $this->redirect('pengaturan');
         }
 
-        if ($this->model('Pengaturan_model')->updateDb()) {
-            $_SESSION['flash'] = ['pesan' => 'Skema database berhasil diperbarui (Update DB Berhasil)', 'tipe' => 'success'];
+        $result = $this->model('Pengaturan_model')->updateDb();
+
+        if ($result['success']) {
+            $_SESSION['flash'] = ['pesan' => $result['message'], 'tipe' => 'success'];
         } else {
-            $path_err = BASEPATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'schema.sql';
-            $_SESSION['flash'] = ['pesan' => 'Gagal memperbarui skema database (Path: '.$path_err.'). Pastikan file schema.sql tersedia.', 'tipe' => 'danger'];
+            $_SESSION['flash'] = ['pesan' => $result['message'], 'tipe' => 'danger'];
         }
         $this->redirect('pengaturan');
     }
