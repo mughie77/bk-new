@@ -70,4 +70,8 @@ class Database {
     public function lastInsertId() {
         return $this->dbh->lastInsertId();
     }
+
+    public function getDbh() {
+        return $this->dbh;
+    }
 }

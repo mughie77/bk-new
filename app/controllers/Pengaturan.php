@@ -65,8 +65,13 @@ class Pengaturan extends Controller {
             $this->redirect('pengaturan');
         }
 
+        // Cek apakah ini repository git
+        if (!is_dir('../.git')) {
+            $_SESSION['flash'] = ['pesan' => 'Folder aplikasi bukan repository Git. Silakan inisialisasi git clone terlebih dahulu.', 'tipe' => 'danger'];
+            $this->redirect('pengaturan');
+        }
+
         // Perintah git pull
-        // Pastikan server memiliki git terinstal dan izin folder yang tepat
         $output = shell_exec('git pull ' . GIT_URL . ' master 2>&1');
 
         if ($output) {
@@ -75,9 +80,23 @@ class Pengaturan extends Controller {
                 'tipe' => strpos($output, 'Updating') !== false || strpos($output, 'Already up to date') !== false ? 'success' : 'danger'
             ];
         } else {
-            $_SESSION['flash'] = ['pesan' => 'Gagal menjalankan perintah update. Pastikan Git terinstal di server.', 'tipe' => 'danger'];
+            $_SESSION['flash'] = ['pesan' => 'Gagal menjalankan perintah update.', 'tipe' => 'danger'];
         }
 
+        $this->redirect('pengaturan');
+    }
+
+    public function update_database() {
+        if ($_SESSION['peran'] !== 'Admin') {
+            $_SESSION['flash'] = ['pesan' => 'Hanya Admin yang dapat memperbarui database', 'tipe' => 'danger'];
+            $this->redirect('pengaturan');
+        }
+
+        if ($this->model('Pengaturan_model')->updateDb()) {
+            $_SESSION['flash'] = ['pesan' => 'Skema database berhasil diperbarui (Update DB Berhasil)', 'tipe' => 'success'];
+        } else {
+            $_SESSION['flash'] = ['pesan' => 'Gagal memperbarui skema database. Pastikan file schema.sql tersedia.', 'tipe' => 'danger'];
+        }
         $this->redirect('pengaturan');
     }
 }

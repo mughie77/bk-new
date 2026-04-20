@@ -57,15 +57,25 @@
             </div>
         </form>
 
-        <div class="mt-8 pt-6 border-t border-slate-100">
-            <h3 class="text-sm font-semibold text-slate-800 mb-2">Update Aplikasi</h3>
-            <p class="text-xs text-slate-500 mb-4">Klik tombol di bawah untuk memperbarui aplikasi langsung dari repository GitHub.</p>
-            <div class="bg-slate-50 p-3 rounded border border-slate-200 mb-4">
-                <p class="text-[10px] font-mono text-slate-600 truncate"><?= GIT_URL; ?></p>
+        <div class="mt-8 pt-6 border-t border-slate-100 space-y-6">
+            <div>
+                <h3 class="text-sm font-semibold text-slate-800 mb-2">Update Kode Aplikasi</h3>
+                <p class="text-xs text-slate-500 mb-3">Tarik pembaruan kode terbaru dari GitHub.</p>
+                <div class="bg-slate-50 p-3 rounded border border-slate-200 mb-3">
+                    <p class="text-[10px] font-mono text-slate-600 truncate"><?= GIT_URL; ?></p>
+                </div>
+                <a href="<?= BASEURL; ?>/pengaturan/update_aplikasi" onclick="return confirm('Apakah Anda yakin ingin memperbarui kode aplikasi?')" class="inline-flex items-center justify-center w-full bg-slate-800 text-white py-2 px-4 rounded-md hover:bg-slate-900 transition text-sm">
+                    <i class="fab fa-github mr-2"></i> Update dari GitHub
+                </a>
             </div>
-            <a href="<?= BASEURL; ?>/pengaturan/update_aplikasi" onclick="return confirm('Apakah Anda yakin ingin memperbarui aplikasi? Pastikan koneksi internet stabil.')" class="inline-flex items-center justify-center w-full bg-slate-800 text-white py-2 px-4 rounded-md hover:bg-slate-900 transition text-sm">
-                <i class="fab fa-github mr-2"></i> Update dari GitHub
-            </a>
+
+            <div>
+                <h3 class="text-sm font-semibold text-slate-800 mb-2">Update Database</h3>
+                <p class="text-xs text-slate-500 mb-3">Jalankan migrasi skema database dari file schema.sql.</p>
+                <a href="<?= BASEURL; ?>/pengaturan/update_database" onclick="return confirm('Apakah Anda yakin ingin memperbarui skema database?')" class="inline-flex items-center justify-center w-full bg-emerald-800 text-white py-2 px-4 rounded-md hover:bg-emerald-900 transition text-sm">
+                    <i class="fas fa-database mr-2"></i> Update Database
+                </a>
+            </div>
         </div>
     </div>
 

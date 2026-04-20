@@ -41,6 +41,19 @@ class Pengaturan_model {
         return $this->db->execute();
     }
 
+    public function updateDb() {
+        $file_path = '../schema.sql';
+        if (!file_exists($file_path)) return false;
+
+        $sql = file_get_contents($file_path);
+        try {
+            $this->db->getDbh()->exec($sql);
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
     // Konsentrasi Keahlian
     public function getAllKonsentrasi() {
         $this->db->query('SELECT * FROM konsentrasi_keahlian');
