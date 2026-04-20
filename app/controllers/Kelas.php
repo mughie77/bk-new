@@ -5,10 +5,18 @@ class Kelas extends Controller {
         if (!isset($_SESSION['login'])) $this->redirect('auth');
     }
 
-    public function index() {
+    public function index($p = 1) {
+        $limit = 10;
+        $start = ($p > 1) ? ($p * $limit) - $limit : 0;
+
         $data['judul'] = 'Data Kelas';
-        $data['kelas'] = $this->model('Kelas_model')->getAllKelas();
+        $data['kelas'] = $this->model('Kelas_model')->getKelasPaged($start, $limit);
+        $total = $this->model('Kelas_model')->countKelas();
+
+        $data['halaman_aktif'] = $p;
+        $data['total_halaman'] = ceil($total / $limit);
         $data['konsentrasi'] = $this->model('Pengaturan_model')->getAllKonsentrasi();
+
         $this->view('templates/header', $data);
         $this->view('kelas/index', $data);
         $this->view('templates/footer');

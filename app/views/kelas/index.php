@@ -37,6 +37,22 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+
+    <!-- Pagination -->
+    <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+        <div class="text-xs text-slate-500">
+            Halaman <?= $data['halaman_aktif']; ?> dari <?= $data['total_halaman']; ?>
+        </div>
+        <div class="flex space-x-2">
+            <?php if($data['halaman_aktif'] > 1) : ?>
+                <a href="<?= BASEURL; ?>/kelas/index/<?= $data['halaman_aktif'] - 1; ?>" class="px-3 py-1 bg-white border border-slate-300 rounded text-xs hover:bg-slate-50">Prev</a>
+            <?php endif; ?>
+
+            <?php if($data['halaman_aktif'] < $data['total_halaman']) : ?>
+                <a href="<?= BASEURL; ?>/kelas/index/<?= $data['halaman_aktif'] + 1; ?>" class="px-3 py-1 bg-white border border-slate-300 rounded text-xs hover:bg-slate-50">Next</a>
+            <?php endif; ?>
+        </div>
+    </div>
 </div>
 
 <!-- Modal -->

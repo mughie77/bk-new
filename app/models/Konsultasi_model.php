@@ -17,6 +17,23 @@ class Konsultasi_model {
         return $this->db->resultSet();
     }
 
+    public function getKonsultasiPaged($start, $limit) {
+        $this->db->query('SELECT k.*, s.nama_siswa, s.nis, kl.nama_kelas
+                          FROM konsultasi k
+                          JOIN siswa s ON k.siswa_id = s.id
+                          LEFT JOIN mapping_siswa_kelas msk ON s.id = msk.siswa_id
+                          LEFT JOIN kelas kl ON msk.kelas_id = kl.id
+                          ORDER BY k.tanggal DESC LIMIT :start, :limit');
+        $this->db->bind('start', (int)$start, PDO::PARAM_INT);
+        $this->db->bind('limit', (int)$limit, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function countKonsultasi() {
+        $this->db->query('SELECT COUNT(*) as total FROM konsultasi');
+        return $this->db->single()['total'];
+    }
+
     public function getKonsultasiById($id) {
         // Ambil data konsultasi lengkap dengan info guru BK dari mapping kelas
         $this->db->query('SELECT k.*, s.nama_siswa, s.nis, s.tahun_masuk, kl.nama_kelas, kk.nama_konsentrasi, kk.singkatan, msk.nomor_urut,
@@ -34,13 +51,12 @@ class Konsultasi_model {
         $data = $this->db->single();
         if ($data) {
             // Generate Kode Samaran: TahunMasuk.Singkatan.NomorUrut
-            $data['kode_samaran'] = $data['tahun_masuk'] . '.' . ($data['singkatan'] ?? 'XX') . '.' . sprintf('%02d', $data['nomor_urut']);
+            $data['kode_samaran'] = ($data['tahun_masuk'] ?? '0000') . '.' . ($data['singkatan'] ?? 'XX') . '.' . sprintf('%02d', $data['nomor_urut'] ?? 0);
         }
         return $data;
     }
 
     public function tambahKonsultasi($data) {
-        // Cari guru_id dari tabel guru_bk berdasarkan pengguna_id yang sedang login (untuk tracking penginput)
         $this->db->query('SELECT id FROM guru_bk WHERE pengguna_id = :pengguna_id');
         $this->db->bind('pengguna_id', $_SESSION['user_id']);
         $guru = $this->db->single();

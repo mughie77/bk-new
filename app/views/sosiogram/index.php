@@ -1,6 +1,13 @@
-<div class="mb-6">
-    <h1 class="text-2xl font-bold text-slate-800">Visualisasi Sosiogram</h1>
-    <p class="text-slate-600">Analisis hubungan sosial antar siswa dalam satu kelas.</p>
+<div class="mb-6 flex justify-between items-center">
+    <div>
+        <h1 class="text-2xl font-bold text-slate-800">Visualisasi Sosiogram</h1>
+        <p class="text-slate-600">Analisis hubungan sosial antar siswa dalam satu kelas.</p>
+    </div>
+    <?php if($data['selected_kelas']) : ?>
+    <button id="downloadBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-md text-sm hover:bg-emerald-700 transition flex items-center shadow-sm">
+        <i class="fas fa-download mr-2"></i> Download Laporan Lengkap
+    </button>
+    <?php endif; ?>
 </div>
 
 <?php if(isset($_SESSION['flash'])) : ?>
@@ -12,7 +19,7 @@
 
 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
     <!-- Sidebar Kelas & Input -->
-    <div class="space-y-6">
+    <div class="space-y-6 no-capture">
         <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
             <h3 class="font-semibold text-slate-800 mb-3 border-b pb-2">Pilih Kelas</h3>
             <div class="space-y-1">
@@ -57,34 +64,31 @@
         <?php endif; ?>
     </div>
 
-    <!-- Visualisasi -->
-    <div class="lg:col-span-3 space-y-6">
+    <!-- Area Visualisasi untuk di-Capture -->
+    <div class="lg:col-span-3 space-y-6" id="capture-area">
         <?php if($data['selected_kelas']) : ?>
-            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-semibold text-slate-800 flex items-center">
-                        <i class="fas fa-project-diagram mr-2 text-blue-600"></i> Graf Hubungan Antar Siswa
-                    </h3>
-                    <button id="downloadBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-md text-sm hover:bg-emerald-700 transition flex items-center shadow-sm">
-                        <i class="fas fa-download mr-2"></i> Download Graf
-                    </button>
+            <div class="bg-white p-8 rounded-lg shadow-sm border border-slate-200">
+                <div class="mb-6 text-center border-b pb-4">
+                    <h2 class="text-xl font-bold text-slate-800 uppercase">Laporan Sosiogram</h2>
+                    <?php
+                        $nama_kelas_aktif = '';
+                        foreach($data['kelas'] as $k) if($k['id'] == $data['selected_kelas']) $nama_kelas_aktif = $k['nama_kelas'];
+                    ?>
+                    <p class="text-slate-600">Kelas: <?= $nama_kelas_aktif; ?></p>
                 </div>
 
-                <div id="sosiogram-container" class="w-full h-[550px] bg-slate-50 border border-slate-200 rounded-xl relative overflow-hidden shadow-inner">
+                <div id="sosiogram-container" class="w-full h-[550px] bg-white border border-slate-100 rounded-xl relative overflow-hidden">
                     <!-- vis.js will render here -->
                 </div>
 
-                <div class="mt-4 flex flex-wrap gap-4 text-[10px] text-slate-500 uppercase tracking-wider font-semibold border-t pt-4">
-                    <div class="flex items-center"><span class="w-3 h-3 bg-blue-500 rounded-full mr-2"></span> Node: Inisial Siswa</div>
-                    <div class="flex items-center"><span class="w-3 h-3 bg-slate-300 rounded-full mr-2"></span> Edge: Arah Hubungan</div>
-                    <div class="flex items-center italic text-blue-700">* Zoom untuk memperbesar, Tarik untuk menggeser</div>
-                </div>
-
                 <div class="mt-8">
-                    <h4 class="font-semibold text-slate-800 mb-4 text-sm border-b pb-2">Detail Hubungan:</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <h4 class="font-bold text-slate-800 mb-4 text-sm border-b pb-2 uppercase tracking-wide">Detail Hubungan Antar Siswa:</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
+                        <?php if(empty($data['relasi'])) : ?>
+                            <p class="text-slate-400 italic text-xs">Belum ada data relasi.</p>
+                        <?php endif; ?>
                         <?php foreach($data['relasi'] as $r) : ?>
-                            <div class="group flex justify-between items-center p-3 bg-white rounded-lg border border-slate-200 hover:border-blue-300 hover:shadow-sm transition text-xs">
+                            <div class="flex justify-between items-center p-2 border-b border-slate-50 text-[11px]">
                                 <div class="flex-1">
                                     <span class="font-bold text-slate-700"><?= $r['sumber']; ?></span>
                                     <span class="text-slate-400 mx-1">&rarr;</span>
@@ -92,12 +96,16 @@
                                     <span class="text-slate-400 mx-1">&rarr;</span>
                                     <span class="font-bold text-slate-700"><?= $r['target']; ?></span>
                                 </div>
-                                <a href="<?= BASEURL; ?>/sosiogram/hapus/<?= $r['id']; ?>/<?= $data['selected_kelas']; ?>" class="text-slate-300 hover:text-red-600 transition ml-2" title="Hapus Relasi">
+                                <a href="<?= BASEURL; ?>/sosiogram/hapus/<?= $r['id']; ?>/<?= $data['selected_kelas']; ?>" class="text-slate-300 hover:text-red-600 transition ml-2 no-capture" title="Hapus">
                                     <i class="fas fa-times-circle"></i>
                                 </a>
                             </div>
                         <?php endforeach; ?>
                     </div>
+                </div>
+
+                <div class="mt-12 pt-6 border-t border-slate-100 text-[10px] text-slate-400 text-right italic">
+                    Dicetak otomatis melalui Aplikasi BK Sekolah pada <?= date('d/m/Y H:i'); ?>
                 </div>
             </div>
         <?php else : ?>
@@ -119,17 +127,11 @@
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
         <?php if($data['selected_kelas']) : ?>
-            // Helper function to get initial
-            function getInitial(name) {
-                return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-            }
-
             // Prepare Data for vis.js
             const nodes = new vis.DataSet([
                 <?php
                 $unique_siswa = [];
                 foreach($data['siswa_di_kelas'] as $s) {
-                    // Generate Initial in PHP to be safe
                     $words = explode(' ', $s['nama_siswa']);
                     $initial = '';
                     foreach($words as $w) $initial .= substr($w, 0, 1);
@@ -175,29 +177,13 @@
             const container = document.getElementById('sosiogram-container');
             const data = { nodes: nodes, edges: edges };
             const options = {
-                nodes: {
-                    borderWidth: 2,
-                    size: 25,
-                },
-                edges: {
-                    selectionWidth: 3
-                },
+                nodes: { borderWidth: 2, size: 25 },
+                edges: { selectionWidth: 3 },
                 physics: {
                     enabled: true,
-                    forceAtlas2Based: {
-                        gravitationalConstant: -100,
-                        centralGravity: 0.01,
-                        springLength: 150,
-                        springConstant: 0.08
-                    },
-                    maxVelocity: 50,
+                    forceAtlas2Based: { gravitationalConstant: -100, centralGravity: 0.01, springLength: 150 },
                     solver: 'forceAtlas2Based',
-                    timestep: 0.35,
-                    stabilization: { iterations: 150 }
-                },
-                interaction: {
-                    hover: true,
-                    tooltipDelay: 200
+                    stabilization: { iterations: 200 }
                 }
             };
             const network = new vis.Network(container, data, options);
@@ -206,19 +192,27 @@
             document.getElementById('downloadBtn').addEventListener('click', function() {
                 const btn = this;
                 btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...';
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mengolah Laporan...';
 
-                html2canvas(document.getElementById('sosiogram-container'), {
-                    backgroundColor: '#f8fafc',
-                    scale: 2
+                // Sembunyikan elemen yang tidak ingin di capture
+                document.querySelectorAll('.no-capture').forEach(el => el.style.display = 'none');
+
+                html2canvas(document.getElementById('capture-area'), {
+                    backgroundColor: '#ffffff',
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
                 }).then(canvas => {
                     const link = document.createElement('a');
-                    link.download = 'sosiogram-kelas-<?= $data['selected_kelas']; ?>.png';
+                    link.download = 'Laporan-Sosiogram-<?= $nama_kelas_aktif; ?>.png';
                     link.href = canvas.toDataURL('image/png');
                     link.click();
 
+                    // Kembalikan elemen yang disembunyikan
+                    document.querySelectorAll('.no-capture').forEach(el => el.style.display = '');
+
                     btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-download mr-2"></i> Download Graf';
+                    btn.innerHTML = '<i class="fas fa-download mr-2"></i> Download Laporan Lengkap';
                 });
             });
         <?php endif; ?>

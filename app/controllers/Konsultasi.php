@@ -5,9 +5,16 @@ class Konsultasi extends Controller {
         if (!isset($_SESSION['login'])) $this->redirect('auth');
     }
 
-    public function index() {
+    public function index($p = 1) {
+        $limit = 10;
+        $start = ($p > 1) ? ($p * $limit) - $limit : 0;
+
         $data['judul'] = 'Laporan Konsultasi';
-        $data['konsultasi'] = $this->model('Konsultasi_model')->getAllKonsultasi();
+        $data['konsultasi'] = $this->model('Konsultasi_model')->getKonsultasiPaged($start, $limit);
+        $total = $this->model('Konsultasi_model')->countKonsultasi();
+
+        $data['halaman_aktif'] = $p;
+        $data['total_halaman'] = ceil($total / $limit);
         $data['siswa'] = $this->model('Siswa_model')->getAllSiswa();
 
         $this->view('templates/header', $data);

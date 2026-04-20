@@ -16,6 +16,21 @@ class Kelas_model {
         return $this->db->resultSet();
     }
 
+    public function getKelasPaged($start, $limit) {
+        $this->db->query('SELECT k.*, kk.nama_konsentrasi
+                          FROM ' . $this->table . ' k
+                          LEFT JOIN konsentrasi_keahlian kk ON k.konsentrasi_id = kk.id
+                          ORDER BY k.nama_kelas ASC LIMIT :start, :limit');
+        $this->db->bind('start', (int)$start, PDO::PARAM_INT);
+        $this->db->bind('limit', (int)$limit, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function countKelas() {
+        $this->db->query('SELECT COUNT(*) as total FROM ' . $this->table);
+        return $this->db->single()['total'];
+    }
+
     public function getKelasById($id) {
         $this->db->query('SELECT * FROM ' . $this->table . ' WHERE id = :id');
         $this->db->bind('id', $id);

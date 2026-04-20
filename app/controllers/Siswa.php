@@ -5,9 +5,17 @@ class Siswa extends Controller {
         if (!isset($_SESSION['login'])) $this->redirect('auth');
     }
 
-    public function index() {
+    public function index($p = 1) {
+        $limit = 10;
+        $start = ($p > 1) ? ($p * $limit) - $limit : 0;
+
         $data['judul'] = 'Data Siswa';
-        $data['siswa'] = $this->model('Siswa_model')->getAllSiswa();
+        $data['siswa'] = $this->model('Siswa_model')->getSiswaPaged($start, $limit);
+        $total = $this->model('Siswa_model')->countSiswa();
+
+        $data['halaman_aktif'] = $p;
+        $data['total_halaman'] = ceil($total / $limit);
+
         $this->view('templates/header', $data);
         $this->view('siswa/index', $data);
         $this->view('templates/footer');

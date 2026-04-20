@@ -9,8 +9,20 @@ class Siswa_model {
     }
 
     public function getAllSiswa() {
-        $this->db->query('SELECT * FROM ' . $this->table);
+        $this->db->query('SELECT * FROM ' . $this->table . ' ORDER BY nama_siswa ASC');
         return $this->db->resultSet();
+    }
+
+    public function getSiswaPaged($start, $limit) {
+        $this->db->query('SELECT * FROM ' . $this->table . ' ORDER BY nama_siswa ASC LIMIT :start, :limit');
+        $this->db->bind('start', (int)$start, PDO::PARAM_INT);
+        $this->db->bind('limit', (int)$limit, PDO::PARAM_INT);
+        return $this->db->resultSet();
+    }
+
+    public function countSiswa() {
+        $this->db->query('SELECT COUNT(*) as total FROM ' . $this->table);
+        return $this->db->single()['total'];
     }
 
     public function getSiswaById($id) {
