@@ -82,8 +82,8 @@
             <p><?= date('d F Y'); ?></p>
             <p>Guru Pembimbing / Konselor</p>
             <br><br><br><br>
-            <p class="font-bold underline"><?= $data['konsultasi']['konsultan']; ?></p>
-            <p>NIP. <?= $data['konsultasi']['nip_guru']; ?></p>
+            <p class="font-bold underline"><?= $data['konsultasi']['guru_pengampu'] ?? $data['konsultasi']['konsultan']; ?></p>
+            <p>NIP. <?= $data['konsultasi']['nip_guru_pengampu'] ?? $data['konsultasi']['nip_guru']; ?></p>
         </div>
     </div>
 

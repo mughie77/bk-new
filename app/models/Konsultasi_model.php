@@ -18,13 +18,16 @@ class Konsultasi_model {
     }
 
     public function getKonsultasiById($id) {
-        $this->db->query('SELECT k.*, s.nama_siswa, s.nis, s.tahun_masuk, kl.nama_kelas, kk.nama_konsentrasi, kk.singkatan, msk.nomor_urut, g.nip as nip_guru
+        // Ambil data konsultasi lengkap dengan info guru BK dari mapping kelas
+        $this->db->query('SELECT k.*, s.nama_siswa, s.nis, s.tahun_masuk, kl.nama_kelas, kk.nama_konsentrasi, kk.singkatan, msk.nomor_urut,
+                                 gbk.nama_guru as guru_pengampu, gbk.nip as nip_guru_pengampu
                           FROM konsultasi k
                           JOIN siswa s ON k.siswa_id = s.id
                           LEFT JOIN mapping_siswa_kelas msk ON s.id = msk.siswa_id
                           LEFT JOIN kelas kl ON msk.kelas_id = kl.id
                           LEFT JOIN konsentrasi_keahlian kk ON kl.konsentrasi_id = kk.id
-                          LEFT JOIN guru_bk g ON k.guru_id = g.id
+                          LEFT JOIN mapping_kelas_guru mkg ON kl.id = mkg.kelas_id
+                          LEFT JOIN guru_bk gbk ON mkg.guru_id = gbk.id
                           WHERE k.id = :id');
         $this->db->bind('id', $id);
 
@@ -37,7 +40,7 @@ class Konsultasi_model {
     }
 
     public function tambahKonsultasi($data) {
-        // Cari guru_id dari tabel guru_bk berdasarkan pengguna_id yang sedang login
+        // Cari guru_id dari tabel guru_bk berdasarkan pengguna_id yang sedang login (untuk tracking penginput)
         $this->db->query('SELECT id FROM guru_bk WHERE pengguna_id = :pengguna_id');
         $this->db->bind('pengguna_id', $_SESSION['user_id']);
         $guru = $this->db->single();

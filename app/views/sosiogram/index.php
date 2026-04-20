@@ -62,32 +62,51 @@
         <?php if($data['selected_kelas']) : ?>
             <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-semibold text-slate-800 italic text-blue-700">Graf Sosiogram</h3>
-                    <button id="downloadBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-md text-sm hover:bg-emerald-700 transition">
-                        <i class="fas fa-download mr-1"></i> Download Gambar
+                    <h3 class="font-semibold text-slate-800 flex items-center">
+                        <i class="fas fa-project-diagram mr-2 text-blue-600"></i> Graf Hubungan Antar Siswa
+                    </h3>
+                    <button id="downloadBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-md text-sm hover:bg-emerald-700 transition flex items-center shadow-sm">
+                        <i class="fas fa-download mr-2"></i> Download Graf
                     </button>
                 </div>
 
-                <div id="sosiogram-container" class="w-full h-[500px] bg-slate-50 border border-slate-200 rounded-lg relative overflow-hidden">
+                <div id="sosiogram-container" class="w-full h-[550px] bg-slate-50 border border-slate-200 rounded-xl relative overflow-hidden shadow-inner">
                     <!-- vis.js will render here -->
                 </div>
 
-                <div class="mt-6">
-                    <h4 class="font-semibold text-sm mb-2">Daftar Relasi Terdaftar:</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div class="mt-4 flex flex-wrap gap-4 text-[10px] text-slate-500 uppercase tracking-wider font-semibold border-t pt-4">
+                    <div class="flex items-center"><span class="w-3 h-3 bg-blue-500 rounded-full mr-2"></span> Node: Inisial Siswa</div>
+                    <div class="flex items-center"><span class="w-3 h-3 bg-slate-300 rounded-full mr-2"></span> Edge: Arah Hubungan</div>
+                    <div class="flex items-center italic text-blue-700">* Zoom untuk memperbesar, Tarik untuk menggeser</div>
+                </div>
+
+                <div class="mt-8">
+                    <h4 class="font-semibold text-slate-800 mb-4 text-sm border-b pb-2">Detail Hubungan:</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <?php foreach($data['relasi'] as $r) : ?>
-                            <div class="flex justify-between items-center p-2 bg-slate-50 rounded border border-slate-100 text-xs">
-                                <span><strong><?= $r['sumber']; ?></strong> &rarr; <?= $r['relasi']; ?> &rarr; <strong><?= $r['target']; ?></strong></span>
-                                <a href="<?= BASEURL; ?>/sosiogram/hapus/<?= $r['id']; ?>/<?= $data['selected_kelas']; ?>" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></a>
+                            <div class="group flex justify-between items-center p-3 bg-white rounded-lg border border-slate-200 hover:border-blue-300 hover:shadow-sm transition text-xs">
+                                <div class="flex-1">
+                                    <span class="font-bold text-slate-700"><?= $r['sumber']; ?></span>
+                                    <span class="text-slate-400 mx-1">&rarr;</span>
+                                    <span class="text-blue-600 font-medium italic"><?= $r['relasi']; ?></span>
+                                    <span class="text-slate-400 mx-1">&rarr;</span>
+                                    <span class="font-bold text-slate-700"><?= $r['target']; ?></span>
+                                </div>
+                                <a href="<?= BASEURL; ?>/sosiogram/hapus/<?= $r['id']; ?>/<?= $data['selected_kelas']; ?>" class="text-slate-300 hover:text-red-600 transition ml-2" title="Hapus Relasi">
+                                    <i class="fas fa-times-circle"></i>
+                                </a>
                             </div>
                         <?php endforeach; ?>
                     </div>
                 </div>
             </div>
         <?php else : ?>
-            <div class="bg-blue-50 p-8 rounded-lg border border-blue-100 text-center text-blue-600">
-                <i class="fas fa-project-diagram text-4xl mb-4 block"></i>
-                Silakan pilih kelas terlebih dahulu untuk melihat visualisasi sosiogram.
+            <div class="bg-blue-50 p-12 rounded-2xl border-2 border-dashed border-blue-200 text-center text-blue-600">
+                <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-project-diagram text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Visualisasi Sosiogram</h3>
+                <p class="text-blue-500 max-w-md mx-auto">Silakan pilih kelas terlebih dahulu dari panel di samping untuk melihat pemetaan jaringan sosial peserta didik.</p>
             </div>
         <?php endif; ?>
     </div>
@@ -100,12 +119,35 @@
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
         <?php if($data['selected_kelas']) : ?>
+            // Helper function to get initial
+            function getInitial(name) {
+                return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+            }
+
             // Prepare Data for vis.js
             const nodes = new vis.DataSet([
                 <?php
                 $unique_siswa = [];
                 foreach($data['siswa_di_kelas'] as $s) {
-                    $unique_siswa[] = "{id: {$s['id']}, label: '{$s['nama_siswa']}', color: '#3b82f6', font: {color: '#ffffff'}}";
+                    // Generate Initial in PHP to be safe
+                    $words = explode(' ', $s['nama_siswa']);
+                    $initial = '';
+                    foreach($words as $w) $initial .= substr($w, 0, 1);
+                    $initial = strtoupper(substr($initial, 0, 2));
+
+                    $unique_siswa[] = "{
+                        id: {$s['id']},
+                        label: '{$initial}',
+                        title: '{$s['nama_siswa']}',
+                        shape: 'circle',
+                        color: {
+                            background: '#3b82f6',
+                            border: '#2563eb',
+                            highlight: { background: '#60a5fa', border: '#3b82f6' }
+                        },
+                        font: { color: '#ffffff', size: 14, face: 'Poppins', weight: 'bold' },
+                        shadow: true
+                    }";
                 }
                 echo implode(',', $unique_siswa);
                 ?>
@@ -115,7 +157,16 @@
                 <?php
                 $relasi_arr = [];
                 foreach($data['relasi'] as $r) {
-                    $relasi_arr[] = "{from: {$r['siswa_sumber_id']}, to: {$r['siswa_target_id']}, label: '{$r['relasi']}', arrows: 'to', font: {align: 'top', size: 10}}";
+                    $relasi_arr[] = "{
+                        from: {$r['siswa_sumber_id']},
+                        to: {$r['siswa_target_id']},
+                        label: '{$r['relasi']}',
+                        arrows: 'to',
+                        color: { color: '#94a3b8', highlight: '#3b82f6' },
+                        font: { align: 'top', size: 9, face: 'Poppins', strokeWidth: 2, strokeColor: '#ffffff' },
+                        width: 1,
+                        smooth: { type: 'curvedCW', roundness: 0.2 }
+                    }";
                 }
                 echo implode(',', $relasi_arr);
                 ?>
@@ -125,27 +176,49 @@
             const data = { nodes: nodes, edges: edges };
             const options = {
                 nodes: {
-                    shape: 'dot',
-                    size: 16
+                    borderWidth: 2,
+                    size: 25,
+                },
+                edges: {
+                    selectionWidth: 3
                 },
                 physics: {
                     enabled: true,
-                    barnesHut: {
-                        gravitationalConstant: -2000,
-                        centralGravity: 0.3,
-                        springLength: 95
-                    }
+                    forceAtlas2Based: {
+                        gravitationalConstant: -100,
+                        centralGravity: 0.01,
+                        springLength: 150,
+                        springConstant: 0.08
+                    },
+                    maxVelocity: 50,
+                    solver: 'forceAtlas2Based',
+                    timestep: 0.35,
+                    stabilization: { iterations: 150 }
+                },
+                interaction: {
+                    hover: true,
+                    tooltipDelay: 200
                 }
             };
             const network = new vis.Network(container, data, options);
 
             // Download Function
             document.getElementById('downloadBtn').addEventListener('click', function() {
-                html2canvas(document.getElementById('sosiogram-container')).then(canvas => {
+                const btn = this;
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...';
+
+                html2canvas(document.getElementById('sosiogram-container'), {
+                    backgroundColor: '#f8fafc',
+                    scale: 2
+                }).then(canvas => {
                     const link = document.createElement('a');
-                    link.download = 'sosiogram-<?= $data['selected_kelas']; ?>.png';
-                    link.href = canvas.toDataURL();
+                    link.download = 'sosiogram-kelas-<?= $data['selected_kelas']; ?>.png';
+                    link.href = canvas.toDataURL('image/png');
                     link.click();
+
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-download mr-2"></i> Download Graf';
                 });
             });
         <?php endif; ?>

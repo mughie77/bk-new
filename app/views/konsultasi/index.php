@@ -20,7 +20,8 @@
         <thead class="bg-slate-50">
             <tr>
                 <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Tanggal</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Nama Siswa</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Nama Siswa (Samaran)</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Nama Asli</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Topik</th>
                 <th class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase">Aksi</th>
             </tr>
@@ -30,8 +31,13 @@
             <tr>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500"><?= date('d/m/Y', strtotime($k['tanggal'])); ?></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
-                    <?= $k['is_anonim'] ? '<span class="italic text-slate-400">Nama Disamarkan</span>' : $k['nama_siswa']; ?>
+                    <?php if($k['is_anonim']): ?>
+                        <span class="bg-amber-50 text-amber-700 px-2 py-1 rounded text-xs border border-amber-200 font-mono">SAMARAN</span>
+                    <?php else: ?>
+                        <span class="text-slate-400">-</span>
+                    <?php endif; ?>
                 </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700"><?= $k['nama_siswa']; ?></td>
                 <td class="px-6 py-4 text-sm text-slate-500 truncate max-w-xs"><?= $k['topik']; ?></td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <a href="<?= BASEURL; ?>/konsultasi/cetak/<?= $k['id']; ?>" target="_blank" class="text-blue-600 hover:text-blue-900 mr-3"><i class="fas fa-print"></i> Cetak</a>
