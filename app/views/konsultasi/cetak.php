@@ -15,7 +15,9 @@
 </head>
 <body class="bg-white p-8">
     <div class="no-print mb-4 flex justify-end">
-        <button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded shadow">Cetak Sekarang</button>
+        <button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded shadow flex items-center">
+            <i class="fas fa-file-pdf mr-2"></i> Cetak / Simpan PDF
+        </button>
     </div>
 
     <!-- Header / Kop Surat -->
@@ -38,7 +40,11 @@
         <tr>
             <td class="border border-slate-300 p-2 font-bold w-1/4">Nama Peserta Didik</td>
             <td class="border border-slate-300 p-2">
-                <?= $data['konsultasi']['is_anonim'] ? 'XXXXX (Nama Disamarkan)' : $data['konsultasi']['nama_siswa']; ?>
+                <?php if($data['konsultasi']['is_anonim']): ?>
+                    <span class="font-mono font-bold"><?= $data['konsultasi']['kode_samaran']; ?></span> (Nama Disamarkan)
+                <?php else: ?>
+                    <?= $data['konsultasi']['nama_siswa']; ?>
+                <?php endif; ?>
             </td>
         </tr>
         <tr>

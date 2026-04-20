@@ -21,6 +21,7 @@
             <tr>
                 <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">NIS / NISN</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Nama Siswa</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Thn Masuk</th>
                 <th class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">Aksi</th>
             </tr>
         </thead>
@@ -29,6 +30,7 @@
             <tr>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500"><?= $s['nis']; ?> / <?= $s['nisn']; ?></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900"><?= $s['nama_siswa']; ?></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500"><?= $s['tahun_masuk']; ?></td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <a href="<?= BASEURL; ?>/siswa/edit/<?= $s['id']; ?>" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>
                     <a href="<?= BASEURL; ?>/siswa/hapus/<?= $s['id']; ?>" class="text-red-600 hover:text-red-900" onclick="return confirm('Hapus siswa ini?')">Hapus</a>
@@ -61,6 +63,10 @@
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Nama Siswa</label>
                     <input type="text" name="nama_siswa" required class="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Tahun Masuk</label>
+                    <input type="number" name="tahun_masuk" value="<?= date('Y'); ?>" required class="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                 </div>
             </div>
             <div class="flex justify-end gap-2 mt-6">

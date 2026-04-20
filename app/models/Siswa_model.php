@@ -20,18 +20,20 @@ class Siswa_model {
     }
 
     public function tambahSiswa($data) {
-        $this->db->query('INSERT INTO ' . $this->table . ' (nis, nisn, nama_siswa) VALUES (:nis, :nisn, :nama)');
+        $this->db->query('INSERT INTO ' . $this->table . (isset($data['tahun_masuk']) ? ' (nis, nisn, nama_siswa, tahun_masuk)' : ' (nis, nisn, nama_siswa)') . ' VALUES (:nis, :nisn, :nama, :tahun)');
         $this->db->bind('nis', $data['nis']);
         $this->db->bind('nisn', $data['nisn']);
         $this->db->bind('nama', $data['nama_siswa']);
+        $this->db->bind('tahun', $data['tahun_masuk'] ?? date('Y'));
         return $this->db->execute();
     }
 
     public function ubahSiswa($data) {
-        $this->db->query('UPDATE ' . $this->table . ' SET nis = :nis, nisn = :nisn, nama_siswa = :nama WHERE id = :id');
+        $this->db->query('UPDATE ' . $this->table . ' SET nis = :nis, nisn = :nisn, nama_siswa = :nama, tahun_masuk = :tahun WHERE id = :id');
         $this->db->bind('nis', $data['nis']);
         $this->db->bind('nisn', $data['nisn']);
         $this->db->bind('nama', $data['nama_siswa']);
+        $this->db->bind('tahun', $data['tahun_masuk']);
         $this->db->bind('id', $data['id']);
         return $this->db->execute();
     }

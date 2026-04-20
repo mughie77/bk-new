@@ -32,11 +32,12 @@
                 <form action="<?= BASEURL; ?>/mapping/tambah_siswa" method="POST" class="flex gap-4">
                     <input type="hidden" name="kelas_id" value="<?= $data['selected_kelas']; ?>">
                     <select name="siswa_id" required class="flex-1 px-3 py-2 border border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">-- Pilih Siswa yang Belum Ada Kelas --</option>
+                        <option value="">-- Pilih Siswa --</option>
                         <?php foreach($data['siswa_tersedia'] as $s) : ?>
                             <option value="<?= $s['id']; ?>"><?= $s['nis']; ?> - <?= $s['nama_siswa']; ?></option>
                         <?php endforeach; ?>
                     </select>
+                    <input type="number" name="nomor_urut" placeholder="No Urut" class="w-20 px-3 py-2 border border-slate-300 rounded-md">
                     <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">Tambah</button>
                 </form>
             </div>
@@ -46,6 +47,7 @@
                 <table class="min-w-full divide-y divide-slate-200">
                     <thead class="bg-slate-50">
                         <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase w-16">No</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">NIS</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Nama Siswa</th>
                             <th class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase">Aksi</th>
@@ -53,10 +55,11 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-slate-200">
                         <?php if(empty($data['siswa_di_kelas'])) : ?>
-                            <tr><td colspan="3" class="px-6 py-4 text-center text-slate-400">Belum ada siswa di kelas ini.</td></tr>
+                            <tr><td colspan="4" class="px-6 py-4 text-center text-slate-400">Belum ada siswa di kelas ini.</td></tr>
                         <?php endif; ?>
                         <?php foreach($data['siswa_di_kelas'] as $s) : ?>
                         <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 font-mono"><?= $s['nomor_urut']; ?></td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500"><?= $s['nis']; ?></td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900"><?= $s['nama_siswa']; ?></td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

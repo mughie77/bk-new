@@ -11,7 +11,8 @@ class Kelas_model {
     public function getAllKelas() {
         $this->db->query('SELECT k.*, kk.nama_konsentrasi
                           FROM ' . $this->table . ' k
-                          LEFT JOIN konsentrasi_keahlian kk ON k.konsentrasi_id = kk.id');
+                          LEFT JOIN konsentrasi_keahlian kk ON k.konsentrasi_id = kk.id
+                          ORDER BY k.nama_kelas ASC');
         return $this->db->resultSet();
     }
 
@@ -22,9 +23,9 @@ class Kelas_model {
     }
 
     public function tambahKelas($data) {
-        $this->db->query('INSERT INTO ' . $this->table . ' (nama_kelas, konsentrasi_id) VALUES (:nama, :konsentrasi)');
+        $this->db->query('INSERT INTO ' . $this->table . (isset($data['konsentrasi_id']) ? ' (nama_kelas, konsentrasi_id)' : ' (nama_kelas)') . ' VALUES (:nama, :konsentrasi)');
         $this->db->bind('nama', $data['nama_kelas']);
-        $this->db->bind('konsentrasi', $data['konsentrasi_id']);
+        $this->db->bind('konsentrasi', $data['konsentrasi_id'] ?? null);
         return $this->db->execute();
     }
 

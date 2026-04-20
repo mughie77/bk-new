@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS pengaturan_sekolah (
 
 CREATE TABLE IF NOT EXISTS konsentrasi_keahlian (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nama_konsentrasi VARCHAR(255) NOT NULL
+    nama_konsentrasi VARCHAR(255) NOT NULL,
+    singkatan VARCHAR(10) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS guru_bk (
@@ -35,7 +36,8 @@ CREATE TABLE IF NOT EXISTS siswa (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nis VARCHAR(20) NOT NULL UNIQUE,
     nisn VARCHAR(20) NOT NULL UNIQUE,
-    nama_siswa VARCHAR(255) NOT NULL
+    nama_siswa VARCHAR(255) NOT NULL,
+    tahun_masuk YEAR
 );
 
 CREATE TABLE IF NOT EXISTS kelas (
@@ -50,6 +52,7 @@ CREATE TABLE IF NOT EXISTS mapping_siswa_kelas (
     siswa_id INT,
     kelas_id INT,
     tahun_ajaran VARCHAR(20),
+    nomor_urut INT,
     FOREIGN KEY (siswa_id) REFERENCES siswa(id) ON DELETE CASCADE,
     FOREIGN KEY (kelas_id) REFERENCES kelas(id) ON DELETE CASCADE
 );

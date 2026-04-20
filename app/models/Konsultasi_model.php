@@ -18,7 +18,7 @@ class Konsultasi_model {
     }
 
     public function getKonsultasiById($id) {
-        $this->db->query('SELECT k.*, s.nama_siswa, s.nis, kl.nama_kelas, kk.nama_konsentrasi, g.nip as nip_guru
+        $this->db->query('SELECT k.*, s.nama_siswa, s.nis, s.tahun_masuk, kl.nama_kelas, kk.nama_konsentrasi, kk.singkatan, msk.nomor_urut, g.nip as nip_guru
                           FROM konsultasi k
                           JOIN siswa s ON k.siswa_id = s.id
                           LEFT JOIN mapping_siswa_kelas msk ON s.id = msk.siswa_id
@@ -27,7 +27,13 @@ class Konsultasi_model {
                           LEFT JOIN guru_bk g ON k.guru_id = g.id
                           WHERE k.id = :id');
         $this->db->bind('id', $id);
-        return $this->db->single();
+
+        $data = $this->db->single();
+        if ($data) {
+            // Generate Kode Samaran: TahunMasuk.Singkatan.NomorUrut
+            $data['kode_samaran'] = $data['tahun_masuk'] . '.' . ($data['singkatan'] ?? 'XX') . '.' . sprintf('%02d', $data['nomor_urut']);
+        }
+        return $data;
     }
 
     public function tambahKonsultasi($data) {

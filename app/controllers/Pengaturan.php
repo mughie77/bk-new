@@ -41,7 +41,7 @@ class Pengaturan extends Controller {
     }
 
     public function tambah_konsentrasi() {
-        if ($this->model('Pengaturan_model')->tambahKonsentrasi($_POST['nama_konsentrasi'])) {
+        if ($this->model('Pengaturan_model')->tambahKonsentrasi($_POST)) {
             $_SESSION['flash'] = ['pesan' => 'Konsentrasi keahlian berhasil ditambah', 'tipe' => 'success'];
         } else {
             $_SESSION['flash'] = ['pesan' => 'Gagal menambah data', 'tipe' => 'danger'];
@@ -66,7 +66,6 @@ class Pengaturan extends Controller {
 
         $base = BASEPATH;
 
-        // Cek apakah Git terinstal
         $git_check = shell_exec("git --version");
         if (!$git_check) {
             $_SESSION['cli_output'] = [
@@ -77,17 +76,13 @@ class Pengaturan extends Controller {
             $this->redirect('pengaturan');
         }
 
-        // Jalankan serangkaian perintah
         $commands = [];
-
-        // Pastikan direktori aman
         $commands[] = "git config --global --add safe.directory \"$base\"";
 
         if (!is_dir($base . DIRECTORY_SEPARATOR . '.git')) {
             $commands[] = "cd /d \"$base\" && git init";
             $commands[] = "cd /d \"$base\" && git remote add origin " . GIT_URL;
         } else {
-            // Jika sudah ada git, pastikan remote URL sesuai dengan GIT_URL terbaru
             $commands[] = "cd /d \"$base\" && git remote set-url origin " . GIT_URL;
         }
 

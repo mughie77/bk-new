@@ -42,10 +42,11 @@ class Pengaturan_model {
     }
 
     public function updateDb() {
-        require_once BASEPATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'update_db.php';
-        $schema_path = BASEPATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'schema.sql';
+        $file_path = BASEPATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'schema.sql';
+        if (!file_exists($file_path)) return false;
 
-        $result = jalankanUpdateDatabase($this->db->getDbh(), $schema_path);
+        require_once BASEPATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'update_db.php';
+        $result = jalankanUpdateDatabase($this->db->getDbh(), $file_path);
         return $result;
     }
 
@@ -61,16 +62,18 @@ class Pengaturan_model {
         return $this->db->single();
     }
 
-    public function tambahKonsentrasi($nama) {
-        $this->db->query('INSERT INTO konsentrasi_keahlian (nama_konsentrasi) VALUES (:nama)');
-        $this->db->bind('nama', $nama);
+    public function tambahKonsentrasi($data) {
+        $this->db->query('INSERT INTO konsentrasi_keahlian (nama_konsentrasi, singkatan) VALUES (:nama, :singkatan)');
+        $this->db->bind('nama', $data['nama_konsentrasi']);
+        $this->db->bind('singkatan', $data['singkatan']);
         return $this->db->execute();
     }
 
-    public function ubahKonsentrasi($id, $nama) {
-        $this->db->query('UPDATE konsentrasi_keahlian SET nama_konsentrasi = :nama WHERE id = :id');
-        $this->db->bind('id', $id);
-        $this->db->bind('nama', $nama);
+    public function ubahKonsentrasi($data) {
+        $this->db->query('UPDATE konsentrasi_keahlian SET nama_konsentrasi = :nama, singkatan = :singkatan WHERE id = :id');
+        $this->db->bind('id', $data['id']);
+        $this->db->bind('nama', $data['nama_konsentrasi']);
+        $this->db->bind('singkatan', $data['singkatan']);
         return $this->db->execute();
     }
 

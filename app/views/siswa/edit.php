@@ -19,6 +19,10 @@
                 <label class="block text-sm font-medium text-slate-700 mb-1">Nama Siswa</label>
                 <input type="text" name="nama_siswa" value="<?= $data['siswa']['nama_siswa']; ?>" required class="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
             </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Tahun Masuk</label>
+                <input type="number" name="tahun_masuk" value="<?= $data['siswa']['tahun_masuk']; ?>" required class="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            </div>
         </div>
         <div class="flex justify-end gap-2 mt-6">
             <a href="<?= BASEURL; ?>/siswa" class="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-md text-sm flex items-center">Batal</a>

@@ -9,10 +9,11 @@ class Mapping_model {
 
     // Mapping Siswa ke Kelas
     public function getSiswaByKelas($kelas_id) {
-        $this->db->query('SELECT s.*, msk.id as mapping_id
+        $this->db->query('SELECT s.*, msk.id as mapping_id, msk.nomor_urut
                           FROM siswa s
                           JOIN mapping_siswa_kelas msk ON s.id = msk.siswa_id
-                          WHERE msk.kelas_id = :kelas_id');
+                          WHERE msk.kelas_id = :kelas_id
+                          ORDER BY msk.nomor_urut ASC');
         $this->db->bind('kelas_id', $kelas_id);
         return $this->db->resultSet();
     }
@@ -23,9 +24,10 @@ class Mapping_model {
     }
 
     public function tambahMappingSiswa($data) {
-        $this->db->query('INSERT INTO mapping_siswa_kelas (siswa_id, kelas_id) VALUES (:siswa_id, :kelas_id)');
+        $this->db->query('INSERT INTO mapping_siswa_kelas (siswa_id, kelas_id, nomor_urut) VALUES (:siswa_id, :kelas_id, :nomor_urut)');
         $this->db->bind('siswa_id', $data['siswa_id']);
         $this->db->bind('kelas_id', $data['kelas_id']);
+        $this->db->bind('nomor_urut', $data['nomor_urut'] ?? 0);
         return $this->db->execute();
     }
 
