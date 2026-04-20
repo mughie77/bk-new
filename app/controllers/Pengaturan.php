@@ -65,8 +65,6 @@ class Pengaturan extends Controller {
         }
 
         $base = BASEPATH;
-        $output_log = [];
-        $return_var = 0;
 
         // Cek apakah Git terinstal
         $git_check = shell_exec("git --version");
@@ -82,12 +80,15 @@ class Pengaturan extends Controller {
         // Jalankan serangkaian perintah
         $commands = [];
 
-        // Pastikan direktori aman (sering jadi masalah di Windows/XAMPP)
+        // Pastikan direktori aman
         $commands[] = "git config --global --add safe.directory \"$base\"";
 
         if (!is_dir($base . DIRECTORY_SEPARATOR . '.git')) {
             $commands[] = "cd /d \"$base\" && git init";
             $commands[] = "cd /d \"$base\" && git remote add origin " . GIT_URL;
+        } else {
+            // Jika sudah ada git, pastikan remote URL sesuai dengan GIT_URL terbaru
+            $commands[] = "cd /d \"$base\" && git remote set-url origin " . GIT_URL;
         }
 
         $commands[] = "cd /d \"$base\" && git fetch --all";
@@ -106,7 +107,7 @@ class Pengaturan extends Controller {
         }
 
         $_SESSION['cli_output'] = [
-            'command' => "Multi-step Git Update",
+            'command' => "Git Synchronize & Update",
             'output' => $full_output,
             'status' => $is_success ? 'success' : 'error'
         ];
