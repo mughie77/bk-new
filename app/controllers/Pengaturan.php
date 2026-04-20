@@ -65,21 +65,20 @@ class Pengaturan extends Controller {
             $this->redirect('pengaturan');
         }
 
-        // Cek apakah ini repository git
+        // Jika bukan repo git, inisialisasi otomatis
         if (!is_dir(BASEPATH . '/.git')) {
-            $_SESSION['flash'] = ['pesan' => 'Folder aplikasi bukan repository Git (Path: '.BASEPATH.'). Silakan inisialisasi git clone terlebih dahulu.', 'tipe' => 'danger'];
-            $this->redirect('pengaturan');
+            $init_command = "cd " . BASEPATH . " && git init && git remote add origin " . GIT_URL . " 2>&1";
+            shell_exec($init_command);
         }
 
         // Perintah git pull
-        // Lakukan cd ke BASEPATH agar git pull berjalan di direktori yang benar
-        $command = "cd " . BASEPATH . " && git pull " . GIT_URL . " master 2>&1";
+        $command = "cd " . BASEPATH . " && git fetch --all && git reset --hard origin/master 2>&1";
         $output = shell_exec($command);
 
         if ($output) {
             $_SESSION['flash'] = [
                 'pesan' => 'Log Update: ' . $output,
-                'tipe' => (strpos($output, 'Updating') !== false || strpos($output, 'Already up to date') !== false || strpos($output, 'Fast-forward') !== false) ? 'success' : 'danger'
+                'tipe' => (strpos($output, 'HEAD is now at') !== false || strpos($output, 'Already up to date') !== false) ? 'success' : 'danger'
             ];
         } else {
             $_SESSION['flash'] = ['pesan' => 'Gagal menjalankan perintah update.', 'tipe' => 'danger'];
@@ -97,7 +96,7 @@ class Pengaturan extends Controller {
         if ($this->model('Pengaturan_model')->updateDb()) {
             $_SESSION['flash'] = ['pesan' => 'Skema database berhasil diperbarui (Update DB Berhasil)', 'tipe' => 'success'];
         } else {
-            $_SESSION['flash'] = ['pesan' => 'Gagal memperbarui skema database (Path: '.BASEPATH.'/schema.sql). Pastikan file schema.sql tersedia.', 'tipe' => 'danger'];
+            $_SESSION['flash'] = ['pesan' => 'Gagal memperbarui skema database (Path: '.BASEPATH.'/config/schema.sql). Pastikan file schema.sql tersedia.', 'tipe' => 'danger'];
         }
         $this->redirect('pengaturan');
     }

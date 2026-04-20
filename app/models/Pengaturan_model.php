@@ -42,12 +42,12 @@ class Pengaturan_model {
     }
 
     public function updateDb() {
-        $file_path = BASEPATH . '/schema.sql';
+        // Lokasi schema.sql dipindahkan ke config/
+        $file_path = BASEPATH . '/config/schema.sql';
         if (!file_exists($file_path)) return false;
 
         $sql = file_get_contents($file_path);
         try {
-            // PDO exec can handle multiple queries if the driver supports it
             $this->db->getDbh()->exec($sql);
             return true;
         } catch (PDOException $e) {
