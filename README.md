@@ -8,6 +8,7 @@ Aplikasi berbasis web untuk mengelola data bimbingan dan konseling siswa, penuga
 - **Mapping:** Penugasan Siswa ke Kelas dan Kelas ke Guru BK.
 - **Laporan Konsultasi:** Pencatatan konsultasi dengan fitur anonimitas dan cetak PDF/Laporan.
 - **Sosiogram:** Visualisasi jejaring sosial siswa dalam satu kelas menggunakan `vis.js` dan fitur download graf.
+7. **Update Otomatis:** Fitur pembaruan kode aplikasi langsung dari GitHub melalui menu Pengaturan.
 
 ## Tech Stack
 - **Backend:** PHP Native (PDO)
@@ -33,6 +34,12 @@ Aplikasi berbasis web untuk mengelola data bimbingan dan konseling siswa, penuga
 4. **Login Default:**
    - **Username:** `admin`
    - **Password:** `admin123`
+
+## Fitur Update
+Untuk menggunakan fitur "Update dari GitHub", pastikan:
+- Server memiliki **Git** yang terinstal dan dapat diakses via baris perintah (`shell_exec`).
+- Folder aplikasi memiliki izin menulis (*write permission*) bagi user web server.
+- Alamat repository di `config/config.php` (`GIT_URL`) sudah benar.
 
 ## Struktur Folder
 - `app/`: Berisi logika inti aplikasi (MVC).
