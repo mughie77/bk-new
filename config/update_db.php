@@ -24,24 +24,30 @@ function jalankanUpdateDatabase($db_connection, $schema_path) {
 
     $success_count = 0;
     $error_count = 0;
-    $errors = [];
+    $ignored_count = 0;
 
-    try {
-        foreach ($queries as $query) {
-            $query = trim($query);
-            if (!empty($query)) {
+    foreach ($queries as $query) {
+        $query = trim($query);
+        if (!empty($query)) {
+            try {
                 $db_connection->exec($query);
                 $success_count++;
+            } catch (PDOException $e) {
+                // Tangani error duplicate (1050: table exists, 1062: duplicate entry, 1060: column exists)
+                $errorCode = $e->errorInfo[1];
+                if (in_array($errorCode, [1050, 1062, 1060, 1061])) {
+                    $ignored_count++;
+                } else {
+                    $error_count++;
+                    // Jika error kritis, kita bisa memilih untuk lanjut atau berhenti
+                    // Di sini kita lanjut untuk query lainnya
+                }
             }
         }
-        return [
-            'success' => true,
-            'message' => "Update database berhasil. ($success_count query dijalankan)"
-        ];
-    } catch (PDOException $e) {
-        return [
-            'success' => false,
-            'message' => "Gagal mengeksekusi query: " . $e->getMessage()
-        ];
     }
+
+    return [
+        'success' => $error_count === 0,
+        'message' => "Update selesai. $success_count query baru, $ignored_count query diabaikan (sudah ada), $error_count error."
+    ];
 }

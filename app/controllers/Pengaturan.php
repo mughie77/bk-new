@@ -59,7 +59,6 @@ class Pengaturan extends Controller {
     }
 
     public function update_aplikasi() {
-        // Hanya Admin yang boleh melakukan update
         if ($_SESSION['peran'] !== 'Admin') {
             $_SESSION['flash'] = ['pesan' => 'Hanya Admin yang dapat memperbarui aplikasi', 'tipe' => 'danger'];
             $this->redirect('pengaturan');
@@ -67,13 +66,21 @@ class Pengaturan extends Controller {
 
         $base = BASEPATH;
 
-        // Cek dan inisialisasi Git jika perlu
+        // Cek apakah Git terinstal
+        $git_check = shell_exec("git --version");
+        if (!$git_check) {
+            $_SESSION['flash'] = ['pesan' => 'Gagal: Git tidak ditemukan di server. Pastikan Git sudah terinstal dan masuk ke Environment Path.', 'tipe' => 'danger'];
+            $this->redirect('pengaturan');
+        }
+
+        // Jika bukan repo git, inisialisasi otomatis
         if (!is_dir($base . DIRECTORY_SEPARATOR . '.git')) {
             $init_command = "cd /d \"$base\" && git init && git remote add origin " . GIT_URL . " 2>&1";
             shell_exec($init_command);
         }
 
-        // Perintah git pull dengan tanda kutip untuk path Windows
+        // Perintah git update
+        // Menggunakan git fetch dan reset hard untuk menjamin sinkronisasi
         $command = "cd /d \"$base\" && git fetch --all && git reset --hard origin/master 2>&1";
         $output = shell_exec($command);
 
@@ -84,7 +91,7 @@ class Pengaturan extends Controller {
                 'tipe' => $is_success ? 'success' : 'danger'
             ];
         } else {
-            $_SESSION['flash'] = ['pesan' => 'Gagal menjalankan perintah update. Pastikan Git terinstal di server dan path benar.', 'tipe' => 'danger'];
+            $_SESSION['flash'] = ['pesan' => 'Gagal menjalankan perintah update. Periksa koneksi internet atau izin folder.', 'tipe' => 'danger'];
         }
 
         $this->redirect('pengaturan');
