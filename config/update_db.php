@@ -30,7 +30,7 @@ function jalankanUpdateDatabase($db_connection, $schema_path) {
         }
     }
 
-    // 2. Definisi Migrasi Kolom (Field yang mungkin baru ditambahkan di update terbaru)
+    // 2. Definisi Migrasi Kolom Lengkap (Semua field yang pernah ditambahkan)
     $migrations = [
         'pengaturan_sekolah' => [
             ['nip_kepala_sekolah', 'VARCHAR(50)', 'AFTER nama_kepala_sekolah']
@@ -49,16 +49,17 @@ function jalankanUpdateDatabase($db_connection, $schema_path) {
             ['nomor_urut', 'INT', 'AFTER kelas_id']
         ],
         'konsultasi' => [
-            ['is_anonim', 'BOOLEAN DEFAULT FALSE', 'AFTER peran_konselor']
+            ['is_anonim', 'BOOLEAN DEFAULT FALSE', 'AFTER peran_konselor'],
+            ['guru_id', 'INT', 'AFTER siswa_id']
         ],
         'sosiogram' => [
             ['kelas_id', 'INT', 'AFTER relasi']
         ]
     ];
 
+    $migrated_log = [];
     $migrated_count = 0;
     foreach ($migrations as $table => $columns) {
-        // Cek apakah tabel ada
         if (!tableExists($db_connection, $table)) continue;
 
         foreach ($columns as $col) {
@@ -70,16 +71,22 @@ function jalankanUpdateDatabase($db_connection, $schema_path) {
                 try {
                     $db_connection->exec("ALTER TABLE `$table` ADD `$colName` $colType $colPos");
                     $migrated_count++;
+                    $migrated_log[] = "$table.$colName";
                 } catch (PDOException $e) {
-                    // Jika gagal (misal kolom sudah ada tapi beda tipe), abaikan
+                    // Abaikan jika gagal
                 }
             }
         }
     }
 
+    $msg = "Update database selesai. $migrated_count kolom baru disinkronkan.";
+    if ($migrated_count > 0) {
+        $msg .= " (Kolom: " . implode(', ', $migrated_log) . ")";
+    }
+
     return [
         'success' => true,
-        'message' => "Update database selesai. $migrated_count kolom baru berhasil disinkronkan ke struktur tabel yang ada."
+        'message' => $msg
     ];
 }
 
