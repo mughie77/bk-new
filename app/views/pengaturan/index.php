@@ -42,9 +42,15 @@
                     <input type="text" name="tahun_pelajaran" value="<?= $data['pengaturan']['tahun_pelajaran']; ?>" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 </div>
             </div>
-            <div>
-                <label class="block text-sm font-medium text-slate-700">Nama Kepala Sekolah</label>
-                <input type="text" name="nama_kepala_sekolah" value="<?= $data['pengaturan']['nama_kepala_sekolah']; ?>" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700">Nama Kepala Sekolah</label>
+                    <input type="text" name="nama_kepala_sekolah" value="<?= $data['pengaturan']['nama_kepala_sekolah']; ?>" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700">NIP Kepala Sekolah</label>
+                    <input type="text" name="nip_kepala_sekolah" value="<?= $data['pengaturan']['nip_kepala_sekolah']; ?>" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
             </div>
             <div class="pt-4">
                 <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition">Simpan Perubahan</button>

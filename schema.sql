@@ -14,7 +14,8 @@ CREATE TABLE IF NOT EXISTS pengaturan_sekolah (
     kop_surat VARCHAR(255),
     semester ENUM('Ganjil', 'Genap') NOT NULL,
     tahun_pelajaran VARCHAR(20) NOT NULL,
-    nama_kepala_sekolah VARCHAR(255) NOT NULL
+    nama_kepala_sekolah VARCHAR(255) NOT NULL,
+    nip_kepala_sekolah VARCHAR(50)
 );
 
 CREATE TABLE IF NOT EXISTS konsentrasi_keahlian (
@@ -24,6 +25,7 @@ CREATE TABLE IF NOT EXISTS konsentrasi_keahlian (
 
 CREATE TABLE IF NOT EXISTS guru_bk (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    nip VARCHAR(50) NOT NULL UNIQUE,
     nama_guru VARCHAR(255) NOT NULL,
     pengguna_id INT,
     FOREIGN KEY (pengguna_id) REFERENCES pengguna(id) ON DELETE SET NULL

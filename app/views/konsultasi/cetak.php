@@ -70,12 +70,14 @@
             <p>Kepala Sekolah</p>
             <br><br><br><br>
             <p class="font-bold underline"><?= $data['pengaturan']['nama_kepala_sekolah']; ?></p>
+            <p>NIP. <?= $data['pengaturan']['nip_kepala_sekolah']; ?></p>
         </div>
         <div class="text-center">
             <p><?= date('d F Y'); ?></p>
             <p>Guru Pembimbing / Konselor</p>
             <br><br><br><br>
             <p class="font-bold underline"><?= $data['konsultasi']['konsultan']; ?></p>
+            <p>NIP. <?= $data['konsultasi']['nip_guru']; ?></p>
         </div>
     </div>
 

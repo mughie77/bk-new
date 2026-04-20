@@ -7,6 +7,10 @@
     <form action="<?= BASEURL; ?>/guru/update" method="POST">
         <input type="hidden" name="id" value="<?= $data['guru']['id']; ?>">
         <div class="mb-4">
+            <label class="block text-sm font-medium text-slate-700 mb-1">NIP</label>
+            <input type="text" name="nip" value="<?= $data['guru']['nip']; ?>" required class="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div class="mb-4">
             <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
             <input type="text" name="nama_guru" value="<?= $data['guru']['nama_guru']; ?>" required class="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
         </div>

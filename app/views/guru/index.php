@@ -19,15 +19,15 @@
     <table class="min-w-full divide-y divide-slate-200">
         <thead class="bg-slate-50">
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">No</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">NIP</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Nama Guru</th>
                 <th class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">Aksi</th>
             </tr>
         </thead>
         <tbody class="bg-white divide-y divide-slate-200">
-            <?php $i = 1; foreach($data['guru'] as $g) : ?>
+            <?php foreach($data['guru'] as $g) : ?>
             <tr>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500"><?= $i++; ?></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500"><?= $g['nip']; ?></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900"><?= $g['nama_guru']; ?></td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <a href="<?= BASEURL; ?>/guru/edit/<?= $g['id']; ?>" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>
@@ -49,6 +49,10 @@
             </button>
         </div>
         <form action="<?= BASEURL; ?>/guru/tambah" method="POST">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-slate-700 mb-1">NIP</label>
+                <input type="text" name="nip" required class="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            </div>
             <div class="mb-4">
                 <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
                 <input type="text" name="nama_guru" required class="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500">

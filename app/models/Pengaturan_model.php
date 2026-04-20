@@ -17,7 +17,8 @@ class Pengaturan_model {
                     nama_sekolah = :nama_sekolah,
                     semester = :semester,
                     tahun_pelajaran = :tahun_pelajaran,
-                    nama_kepala_sekolah = :nama_kepala_sekolah";
+                    nama_kepala_sekolah = :nama_kepala_sekolah,
+                    nip_kepala_sekolah = :nip_kepala_sekolah";
 
         if ($file && $file['name']) {
             $query .= ", kop_surat = :kop_surat";
@@ -30,6 +31,7 @@ class Pengaturan_model {
         $this->db->bind('semester', $data['semester']);
         $this->db->bind('tahun_pelajaran', $data['tahun_pelajaran']);
         $this->db->bind('nama_kepala_sekolah', $data['nama_kepala_sekolah']);
+        $this->db->bind('nip_kepala_sekolah', $data['nip_kepala_sekolah']);
         $this->db->bind('id', $data['id']);
 
         if ($file && $file['name']) {

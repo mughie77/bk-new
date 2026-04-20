@@ -18,12 +18,13 @@ class Konsultasi_model {
     }
 
     public function getKonsultasiById($id) {
-        $this->db->query('SELECT k.*, s.nama_siswa, s.nis, kl.nama_kelas, kk.nama_konsentrasi
+        $this->db->query('SELECT k.*, s.nama_siswa, s.nis, kl.nama_kelas, kk.nama_konsentrasi, g.nip as nip_guru
                           FROM konsultasi k
                           JOIN siswa s ON k.siswa_id = s.id
                           LEFT JOIN mapping_siswa_kelas msk ON s.id = msk.siswa_id
                           LEFT JOIN kelas kl ON msk.kelas_id = kl.id
                           LEFT JOIN konsentrasi_keahlian kk ON kl.konsentrasi_id = kk.id
+                          LEFT JOIN guru_bk g ON k.guru_id = g.id
                           WHERE k.id = :id');
         $this->db->bind('id', $id);
         return $this->db->single();

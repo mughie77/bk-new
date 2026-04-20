@@ -29,7 +29,7 @@
 
         <form action="<?= BASEURL; ?>/auth/login" method="POST" class="space-y-4">
             <div>
-                <label for="username" class="block text-sm font-medium text-slate-700">Username</label>
+                <label for="username" class="block text-sm font-medium text-slate-700">NIP / Username</label>
                 <input type="text" name="username" id="username" required
                     class="w-full px-4 py-2 mt-1 border border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
             </div>
