@@ -66,6 +66,7 @@ class Pengaturan extends Controller {
 
         $base = BASEPATH;
 
+        // Cek apakah Git terinstal
         $git_check = shell_exec("git --version");
         if (!$git_check) {
             $_SESSION['cli_output'] = [
@@ -76,6 +77,7 @@ class Pengaturan extends Controller {
             $this->redirect('pengaturan');
         }
 
+        // Jalankan serangkaian perintah
         $commands = [];
         $commands[] = "git config --global --add safe.directory \"$base\"";
 
@@ -87,7 +89,11 @@ class Pengaturan extends Controller {
         }
 
         $commands[] = "cd /d \"$base\" && git fetch --all";
-        $commands[] = "cd /d \"$base\" && git reset --hard origin/master";
+
+        // Coba deteksi branch master atau main
+        // Gunakan perintah untuk mendapatkan branch default dari remote
+        $commands[] = "cd /d \"$base\" && git remote set-head origin -a";
+        $commands[] = "cd /d \"$base\" && git reset --hard origin/HEAD";
 
         $full_output = "";
         $is_success = true;
@@ -96,13 +102,17 @@ class Pengaturan extends Controller {
             $cmd_output = [];
             exec($cmd . " 2>&1", $cmd_output, $result_code);
             $full_output .= "> " . $cmd . "\n" . implode("\n", $cmd_output) . "\n\n";
-            if ($result_code !== 0 && strpos($cmd, 'safe.directory') === false) {
-                $is_success = false;
+
+            // Kami mengabaikan kegagalan safe.directory dan set-head origin -a jika HEAD sudah ada
+            if ($result_code !== 0) {
+                if (strpos($cmd, 'safe.directory') === false && strpos($cmd, 'set-head') === false) {
+                    $is_success = false;
+                }
             }
         }
 
         $_SESSION['cli_output'] = [
-            'command' => "Git Synchronize & Update",
+            'command' => "Git Intelligent Update",
             'output' => $full_output,
             'status' => $is_success ? 'success' : 'error'
         ];
