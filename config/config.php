@@ -9,4 +9,4 @@ define('DB_PASS', '');
 define('DB_NAME', 'bk_sekolah');
 
 // GIT UPDATE
-define('GIT_URL', 'https://github.com/username/bk-sekolah.git');
+define('GIT_URL', 'https://github.com/mughie77/bk-new.git');
