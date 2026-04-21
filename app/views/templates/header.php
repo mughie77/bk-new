@@ -58,44 +58,55 @@
                 </div>
 
                 <?php
-                    $url = isset($_GET['url']) ? explode('/', rtrim($_GET['url'], '/'))[0] : 'home';
-                    function isActive($target, $current) {
-                        return $target == $current ? 'active-menu' : 'text-slate-700 hover:bg-blue-50 hover:text-blue-700';
+                    $url = isset($_GET['url']) ? explode('/', rtrim($_GET['url'], '/')) : ['home'];
+                    $controller = $url[0];
+                    $method = isset($url[1]) ? $url[1] : '';
+
+                    function isActive($target_controller, $target_method, $current_controller, $current_method) {
+                        if ($target_controller == $current_controller) {
+                            if ($target_method == '' || $target_method == $current_method) {
+                                return 'active-menu';
+                            }
+                        }
+                        return 'text-slate-700 hover:bg-blue-50 hover:text-blue-700';
                     }
                 ?>
 
                 <nav class="space-y-1">
-                    <a href="<?= BASEURL; ?>/home" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('home', $url); ?>">
+                    <a href="<?= BASEURL; ?>/home" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('home', '', $controller, $method); ?>">
                         <i class="fas fa-home w-6"></i> <span>Dashboard</span>
                     </a>
 
                     <div class="pt-4 pb-1 px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Data Master</div>
-                    <a href="<?= BASEURL; ?>/guru" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('guru', $url); ?>">
+                    <a href="<?= BASEURL; ?>/guru" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('guru', '', $controller, $method); ?>">
                         <i class="fas fa-chalkboard-teacher w-6"></i> <span>Guru BK</span>
                     </a>
-                    <a href="<?= BASEURL; ?>/siswa" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('siswa', $url); ?>">
+                    <a href="<?= BASEURL; ?>/siswa" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('siswa', '', $controller, $method); ?>">
                         <i class="fas fa-user-graduate w-6"></i> <span>Siswa</span>
                     </a>
-                    <a href="<?= BASEURL; ?>/kelas" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('kelas', $url); ?>">
+                    <a href="<?= BASEURL; ?>/kelas" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('kelas', '', $controller, $method); ?>">
                         <i class="fas fa-school w-6"></i> <span>Kelas</span>
                     </a>
 
                     <div class="pt-4 pb-1 px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mapping</div>
-                    <a href="<?= BASEURL; ?>/mapping" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('mapping', $url); ?>">
-                        <i class="fas fa-link w-6"></i> <span>Mapping & Penugasan</span>
+                    <a href="<?= BASEURL; ?>/mapping/siswa" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('mapping', 'siswa', $controller, $method); ?>">
+                        <i class="fas fa-users-cog w-6"></i> <span>Siswa ke Kelas</span>
+                    </a>
+                    <a href="<?= BASEURL; ?>/mapping/guru" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('mapping', 'guru', $controller, $method); ?>">
+                        <i class="fas fa-user-tag w-6"></i> <span>Kelas ke Guru</span>
                     </a>
 
                     <div class="pt-4 pb-1 px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Layanan</div>
-                    <a href="<?= BASEURL; ?>/konsultasi" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('konsultasi', $url); ?>">
+                    <a href="<?= BASEURL; ?>/konsultasi" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('konsultasi', '', $controller, $method); ?>">
                         <i class="fas fa-comments w-6"></i> <span>Laporan Konsultasi</span>
                     </a>
-                    <a href="<?= BASEURL; ?>/sosiogram" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('sosiogram', $url); ?>">
+                    <a href="<?= BASEURL; ?>/sosiogram" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('sosiogram', '', $controller, $method); ?>">
                         <i class="fas fa-project-diagram w-6"></i> <span>Sosiogram</span>
                     </a>
 
                     <?php if($_SESSION['peran'] == 'Admin'): ?>
                     <div class="pt-4 pb-1 px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sistem</div>
-                    <a href="<?= BASEURL; ?>/pengaturan" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('pengaturan', $url); ?>">
+                    <a href="<?= BASEURL; ?>/pengaturan" class="flex items-center px-4 py-3 text-sm font-medium transition <?= isActive('pengaturan', '', $controller, $method); ?>">
                         <i class="fas fa-cogs w-6"></i> <span>Pengaturan</span>
                     </a>
                     <?php endif; ?>

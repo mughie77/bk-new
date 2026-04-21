@@ -5,6 +5,10 @@ class Mapping extends Controller {
         if (!isset($_SESSION['login'])) $this->redirect('auth');
     }
 
+    public function index() {
+        $this->redirect('mapping/siswa');
+    }
+
     public function siswa($kelas_id = null) {
         $data['judul'] = 'Mapping Siswa ke Kelas';
         $data['kelas'] = $this->model('Kelas_model')->getAllKelas();
