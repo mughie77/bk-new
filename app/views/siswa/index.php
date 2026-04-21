@@ -16,7 +16,8 @@
 <?php endif; ?>
 
 <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
-    <table class="min-w-full divide-y divide-slate-200">
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-200">
         <thead class="bg-slate-50">
             <tr>
                 <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">NIS / NISN</th>
@@ -38,7 +39,8 @@
             </tr>
             <?php endforeach; ?>
         </tbody>
-    </table>
+        </table>
+    </div>
 
     <!-- Pagination -->
     <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
