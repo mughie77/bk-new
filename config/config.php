@@ -1,6 +1,6 @@
 <?php
 
-define('BASEURL', 'http://localhost:8000');
+define('BASEURL', 'http://localhost/bk-sekolah/');
 
 // DB
 define('DB_HOST', 'localhost');
