@@ -26,7 +26,7 @@
     $kop_path = BASEPATH . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . $data['pengaturan']['kop_surat'];
     if(!empty($data['pengaturan']['kop_surat']) && file_exists($kop_path)):
     ?>
-        <div class="mb-6">
+        <div class="mb-6 border-b-4 border-black pb-2">
             <img src="<?= BASEURL; ?>/uploads/<?= $data['pengaturan']['kop_surat']; ?>" class="w-full h-auto max-h-32 object-contain">
         </div>
     <?php else: ?>
@@ -40,7 +40,11 @@
     <?php endif; ?>
 
     <div class="text-center mb-8">
-        <h2 class="text-xl font-bold border-b-2 border-slate-800 inline-block px-4">LAPORAN KONSULTASI SEMESTER <?= strtoupper($data['pengaturan']['semester']); ?> TAHUN PELAJARAN <?= $data['pengaturan']['tahun_pelajaran']; ?></h2>
+        <h2 class="text-xl font-bold px-4">
+            LAPORAN KONSULTASI <br />
+            SEMESTER <?= strtoupper($data['pengaturan']['semester']); ?> <br />
+            TAHUN PELAJARAN <?= $data['pengaturan']['tahun_pelajaran']; ?>
+        </h2>
     </div>
 
     <table class="w-full mb-8 border-collapse border border-slate-300">
