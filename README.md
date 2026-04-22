@@ -1,49 +1,45 @@
 # Aplikasi Bimbingan dan Konseling (BK) Sekolah
 
-Aplikasi berbasis web untuk mengelola data bimbingan dan konseling siswa, penugasan guru BK ke kelas, laporan konsultasi, dan visualisasi sosiogram.
+Sistem informasi manajemen bimbingan dan konseling sekolah berbasis web menggunakan PHP Native dengan arsitektur MVC sederhana dan Tailwind CSS.
 
 ## Fitur Utama
-1. **Dashboard:** Ringkasan data sekolah.
-2. **Data Master:** CRUD Guru BK (NIP, Nama), Siswa, dan Kelas.
-3. **Mapping:** Penugasan Siswa ke Kelas dan Kelas ke Guru BK.
-4. **Laporan Konsultasi:** Pencatatan konsultasi dengan fitur anonimitas dan cetak laporan profesional (Kop Surat, TTD NIP).
-5. **Sosiogram:** Visualisasi jejaring sosial siswa dalam satu kelas menggunakan `vis.js` dan fitur download graf.
-6. **Update Otomatis:** Fitur pembaruan kode aplikasi langsung dari GitHub melalui menu Pengaturan.
-7. **Update Database:** Sinkronisasi skema database melalui menu Pengaturan.
+- **Dashboard Modern:** Visualisasi data ringkas dengan antarmuka profesional.
+- **Manajemen Data Master:** CRUD Guru BK, Siswa, dan Kelas.
+- **Sistem Mapping:** Penempatan siswa ke kelas dan penugasan Guru BK ke kelas binaan.
+- **Laporan Konsultasi:** Pencatatan aktivitas BK dengan fitur anonimitas otomatis.
+- **Cetak Laporan Profesional:** Output PDF-ready dengan Kop Surat dinamis dan tanda tangan otomatis.
+- **Visualisasi Sosiogram:** Grafik hubungan antar siswa menggunakan `vis.js` yang dapat diunduh sebagai gambar.
+- **Update System:** Fitur pembaruan kode via Git dan sinkronisasi database dalam satu klik.
 
-## Tech Stack
-- **Backend:** PHP Native (PDO)
-- **Frontend:** HTML5, Tailwind CSS (CDN)
-- **Database:** MySQL
-- **Libraries:** vis.js, html2canvas, FontAwesome
+## Persyaratan Sistem
+- PHP >= 8.0
+- MySQL >= 5.7
+- Web Server (Apache/Nginx/Litespeed)
+- Mod_Rewrite aktif (untuk `.htaccess`)
 
-## Langkah Instalasi
+## Instruksi Instalasi
 
-1. **Persiapan Database:**
-   - Buat database baru di MySQL dengan nama `bk_sekolah`.
-   - Import file `config/schema.sql` yang tersedia di folder config ke dalam database tersebut.
+1. **Clone Repository / Ekstrak File:**
+   Letakkan semua file di direktori root web server Anda (misal: `htdocs` atau `/var/www/html`).
 
-2. **Konfigurasi Aplikasi:**
+2. **Konfigurasi Database:**
+   - Buat database baru di MySQL (misal: `bk_sekolah`).
+   - Impor file `config/schema.sql` ke dalam database tersebut.
+
+3. **Pengaturan Aplikasi:**
    - Buka file `config/config.php`.
-   - Sesuaikan nilai `BASEURL` dengan alamat folder project Anda (misal: `http://localhost/bk-sekolah/public`).
-   - Sesuaikan konfigurasi database (`DB_HOST`, `DB_USER`, `DB_PASS`, `DB_NAME`) jika berbeda.
-   - Sesuaikan `GIT_URL` dengan alamat repository GitHub Anda.
-
-3. **Web Server:**
-   - Pastikan modul `mod_rewrite` di Apache aktif (untuk mendukung `.htaccess`).
-   - Arahkan *Document Root* web server ke folder `public/` atau akses melalui `localhost/bk-sekolah/public`.
+   - Sesuaikan `BASEURL` dengan URL akses aplikasi Anda (contoh: `http://localhost/bk-sekolah`).
+   - Masukkan kredensial database (`DB_HOST`, `DB_USER`, `DB_PASS`, `DB_NAME`).
 
 4. **Login Default:**
    - **Username:** `admin`
    - **Password:** `admin123`
-   - **Login Guru:** Gunakan NIP yang didaftarkan.
-
-## Fitur Update
-- **Update Kode:** Tombol ini akan melakukan `git fetch` dan `git reset` ke origin/master. Jika folder bukan repository git, aplikasi akan mencoba melakukan inisialisasi otomatis menggunakan `GIT_URL`.
-- **Update Database:** Tombol ini akan menjalankan perintah SQL dari `config/schema.sql`.
 
 ## Struktur Folder
-- `app/`: Berisi logika inti aplikasi (MVC).
-- `config/`: Konfigurasi dan skema database.
-- `public/`: Folder publik (Entry point).
-- `uploads/`: Lokasi penyimpanan file kop surat.
+- `app/`: Berisi logika inti aplikasi (Controllers, Models, Views, Core).
+- `config/`: File konfigurasi dan skema database.
+- `public/`: Folder publik yang diakses user (index.php, CSS, JS, Gambar).
+- `uploads/`: Lokasi penyimpanan file upload seperti Kop Surat.
+
+## Lisensi
+Aplikasi ini dikembangkan untuk keperluan manajemen sekolah dengan standar keamanan PDO.
