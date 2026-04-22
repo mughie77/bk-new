@@ -12,7 +12,7 @@
             body { padding: 0; margin: 0; }
         }
         body { font-family: 'Times New Roman', Times, serif; color: #000; }
-        table td { padding: 8px !important; }
+        table td, table th { padding: 8px !important; border: 1px solid #000 !important; }
     </style>
 </head>
 <body class="bg-white p-8">
@@ -27,8 +27,8 @@
     $kop_path = BASEPATH . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . $data['pengaturan']['kop_surat'];
     if(!empty($data['pengaturan']['kop_surat']) && file_exists($kop_path)):
     ?>
-        <div class="mb-6 border-b-4 border-black pb-2">
-            <img src="<?= BASEURL; ?>/uploads/<?= $data['pengaturan']['kop_surat']; ?>" class="w-full h-auto max-h-32 object-contain">
+        <div class="mb-6 border-b-4 border-black pb-2 text-center">
+            <img src="<?= BASEURL; ?>/uploads/<?= $data['pengaturan']['kop_surat']; ?>" class="h-auto max-h-32 inline-block">
         </div>
     <?php else: ?>
         <div class="border-b-4 border-black pb-2 mb-6 flex items-center">
@@ -59,40 +59,56 @@
     ?>
 
     <table class="w-full mb-8 border-collapse border border-black">
-        <tr>
-            <td class="border border-black font-bold w-1/3">1. Nama peserta didik/Konseli</td>
-            <td class="border border-black">
-                <?php if($data['konsultasi']['is_anonim']): ?>
-                    <span class="font-mono font-bold"><?= $data['konsultasi']['kode_samaran']; ?></span> (Nama Disamarkan)
-                <?php else: ?>
-                    <?= $data['konsultasi']['nama_siswa']; ?>
-                <?php endif; ?>
-            </td>
-        </tr>
-        <tr>
-            <td class="border border-black font-bold">2. Kelas /Semester</td>
-            <td class="border border-black"><?= $data['konsultasi']['nama_kelas']; ?> / <?= $data['pengaturan']['semester']; ?></td>
-        </tr>
-        <tr>
-            <td class="border border-black font-bold">3. Hari / Tanggal</td>
-            <td class="border border-black"><?= $hari_id . ', ' . $tgl_id; ?></td>
-        </tr>
-        <tr>
-            <td class="border border-black font-bold">4. Waktu</td>
-            <td class="border border-black"><?= $data['konsultasi']['waktu_menit']; ?> Menit</td>
-        </tr>
-        <tr>
-            <td class="border border-black font-bold">5. Topik pembahasan</td>
-            <td class="border border-black whitespace-pre-wrap leading-relaxed"><?= nl2br($data['konsultasi']['topik']); ?></td>
-        </tr>
-        <tr>
-            <td class="border border-black font-bold">6. Konsultan / Nara Sumber</td>
-            <td class="border border-black"><?= $data['konsultasi']['konsultan']; ?></td>
-        </tr>
-        <tr>
-            <td class="border border-black font-bold">7. Peran Guru Bimbingan dan Konseling atau Konselor</td>
-            <td class="border border-black"><?= $data['konsultasi']['peran_konselor']; ?></td>
-        </tr>
+        <thead>
+            <tr class="bg-slate-100">
+                <th class="text-center w-[5%] font-bold">No</th>
+                <th class="text-left w-[35%] font-bold">Uraian / Judul</th>
+                <th class="text-left font-bold">Keterangan / Isi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="text-center">1</td>
+                <td class="font-bold">Nama peserta didik/Konseli</td>
+                <td>
+                    <?php if($data['konsultasi']['is_anonim']): ?>
+                        <span class="font-mono font-bold"><?= $data['konsultasi']['kode_samaran']; ?></span> (Nama Disamarkan)
+                    <?php else: ?>
+                        <?= $data['konsultasi']['nama_siswa']; ?>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center">2</td>
+                <td class="font-bold">Kelas /Semester</td>
+                <td><?= $data['konsultasi']['nama_kelas']; ?> / <?= $data['pengaturan']['semester']; ?></td>
+            </tr>
+            <tr>
+                <td class="text-center">3</td>
+                <td class="font-bold">Hari / Tanggal</td>
+                <td><?= $hari_id . ', ' . $tgl_id; ?></td>
+            </tr>
+            <tr>
+                <td class="text-center">4</td>
+                <td class="font-bold">Waktu</td>
+                <td><?= $data['konsultasi']['waktu_menit']; ?> Menit</td>
+            </tr>
+            <tr>
+                <td class="text-center">5</td>
+                <td class="font-bold">Topik pembahasan</td>
+                <td class="whitespace-pre-wrap leading-relaxed"><?= nl2br($data['konsultasi']['topik']); ?></td>
+            </tr>
+            <tr>
+                <td class="text-center">6</td>
+                <td class="font-bold">Konsultan / Nara Sumber</td>
+                <td><?= $data['konsultasi']['konsultan']; ?></td>
+            </tr>
+            <tr>
+                <td class="text-center">7</td>
+                <td class="font-bold">Peran Guru Bimbingan dan Konseling atau Konselor</td>
+                <td><?= $data['konsultasi']['peran_konselor']; ?></td>
+            </tr>
+        </tbody>
     </table>
 
     <!-- Footer / TTD -->
