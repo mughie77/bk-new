@@ -26,7 +26,7 @@
             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-full">Total Siswa</span>
         </div>
         <div>
-            <h3 class="text-3xl font-black text-slate-800 tracking-tight">1,248</h3>
+            <h3 class="text-3xl font-black text-slate-800 tracking-tight"><?= number_format($data['total_siswa']); ?></h3>
             <p class="text-sm text-slate-500 mt-1">Siswa Terdaftar</p>
         </div>
         <div class="mt-6 pt-6 border-t border-slate-50 flex items-center text-xs text-emerald-500 font-bold">
@@ -42,8 +42,8 @@
             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-full">Konsultasi</span>
         </div>
         <div>
-            <h3 class="text-3xl font-black text-slate-800 tracking-tight">42</h3>
-            <p class="text-sm text-slate-500 mt-1">Sesi Bulan Ini</p>
+            <h3 class="text-3xl font-black text-slate-800 tracking-tight"><?= number_format($data['total_konsultasi']); ?></h3>
+            <p class="text-sm text-slate-500 mt-1">Total Konsultasi</p>
         </div>
         <div class="mt-6 pt-6 border-t border-slate-50 flex items-center text-xs text-blue-500 font-bold">
             <i class="fas fa-clock mr-1"></i> Rata-rata 45 menit/sesi
@@ -58,8 +58,8 @@
             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-full">Sosiogram</span>
         </div>
         <div>
-            <h3 class="text-3xl font-black text-slate-800 tracking-tight">18</h3>
-            <p class="text-sm text-slate-500 mt-1">Kelas Teranalisis</p>
+            <h3 class="text-3xl font-black text-slate-800 tracking-tight"><?= number_format($data['total_relasi']); ?></h3>
+            <p class="text-sm text-slate-500 mt-1">Hubungan Terinput</p>
         </div>
         <div class="mt-6 pt-6 border-t border-slate-50 flex items-center text-xs text-amber-600 font-bold">
             <i class="fas fa-bolt mr-1"></i> Data real-time sinkron

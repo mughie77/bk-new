@@ -199,9 +199,11 @@
 
                 html2canvas(document.getElementById('capture-area'), {
                     backgroundColor: '#ffffff',
-                    scale: 2,
+                    scale: 3,
                     useCORS: true,
-                    logging: false
+                    logging: false,
+                    allowTaint: true,
+                    windowWidth: 1200
                 }).then(canvas => {
                     const link = document.createElement('a');
                     link.download = 'Laporan-Sosiogram-<?= $nama_kelas_aktif; ?>.png';

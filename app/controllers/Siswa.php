@@ -55,4 +55,27 @@ class Siswa extends Controller {
         }
         $this->redirect('siswa');
     }
+
+    public function import() {
+        // Menerima JSON dari frontend (SheetJS)
+        $data_json = file_get_contents('php://input');
+        $siswa_list = json_decode($data_json, true);
+
+        if (!$siswa_list || !is_array($siswa_list)) {
+            echo json_encode(['status' => 'error', 'message' => 'Data tidak valid']);
+            return;
+        }
+
+        $berhasil = 0;
+        foreach ($siswa_list as $s) {
+            // Validasi minimal ada Nama dan NIS
+            if (!empty($s['nama_siswa']) && !empty($s['nis'])) {
+                if ($this->model('Siswa_model')->tambahSiswa($s)) {
+                    $berhasil++;
+                }
+            }
+        }
+
+        echo json_encode(['status' => 'success', 'message' => "$berhasil siswa berhasil diimport"]);
+    }
 }

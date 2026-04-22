@@ -32,4 +32,9 @@ class Sosiogram_model {
         $this->db->bind('id', $id);
         return $this->db->execute();
     }
+
+    public function countTotalRelasi() {
+        $this->db->query('SELECT COUNT(*) as total FROM sosiogram');
+        return $this->db->single()['total'];
+    }
 }
