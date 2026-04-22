@@ -45,4 +45,10 @@ class Konsultasi extends Controller {
         }
         $this->redirect('konsultasi');
     }
+
+    public function get_guru_by_siswa($id) {
+        $guru = $this->model('Mapping_model')->getGuruBySiswaId($id);
+        header('Content-Type: application/json');
+        echo json_encode($guru ? $guru : ['nama_guru' => '']);
+    }
 }

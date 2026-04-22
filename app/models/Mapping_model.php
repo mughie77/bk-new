@@ -85,4 +85,15 @@ class Mapping_model {
         $this->db->bind('id', $id);
         return $this->db->execute();
     }
+
+    public function getGuruBySiswaId($siswa_id) {
+        $this->db->query('SELECT g.nama_guru
+                          FROM siswa s
+                          JOIN mapping_siswa_kelas msk ON s.id = msk.siswa_id
+                          JOIN mapping_kelas_guru mkg ON msk.kelas_id = mkg.kelas_id
+                          JOIN guru_bk g ON mkg.guru_id = g.id
+                          WHERE s.id = :siswa_id');
+        $this->db->bind('siswa_id', $siswa_id);
+        return $this->db->single();
+    }
 }

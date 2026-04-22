@@ -80,7 +80,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-slate-700 mb-1">Pilih Siswa</label>
-                    <select name="siswa_id" required class="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    <select name="siswa_id" id="select-siswa" required class="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                         <option value="">-- Pilih Siswa --</option>
                         <?php foreach($data['siswa'] as $s) : ?>
                             <option value="<?= $s['id']; ?>"><?= $s['nis']; ?> - <?= $s['nama_siswa']; ?></option>
@@ -101,7 +101,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Konsultan / Narasumber</label>
-                    <input type="text" name="konsultan" value="<?= $_SESSION['nama']; ?>" required class="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    <input type="text" name="konsultan" id="input-konsultan" value="<?= $_SESSION['nama']; ?>" required class="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Peran Konselor</label>
@@ -119,3 +119,24 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.getElementById('select-siswa').addEventListener('change', function() {
+        const siswaId = this.value;
+        const inputKonsultan = document.getElementById('input-konsultan');
+
+        if (siswaId) {
+            fetch('<?= BASEURL; ?>/konsultasi/get_guru_by_siswa/' + siswaId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.nama_guru) {
+                        inputKonsultan.value = data.nama_guru;
+                    } else {
+                        // Fallback ke nama user login jika tidak ada mapping
+                        inputKonsultan.value = '<?= $_SESSION['nama']; ?>';
+                    }
+                })
+                .catch(error => console.error('Error fetching guru:', error));
+        }
+    });
+</script>
