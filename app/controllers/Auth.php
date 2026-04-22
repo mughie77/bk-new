@@ -6,6 +6,7 @@ class Auth extends Controller {
             $this->redirect('home');
         }
         $data['judul'] = 'Login - Aplikasi BK';
+        $data['sekolah'] = $this->model('Pengaturan_model')->getPengaturan();
         $this->view('auth/login', $data);
     }
 

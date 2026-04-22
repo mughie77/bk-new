@@ -133,7 +133,7 @@
                         <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
                         <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">System Status</span>
                     </div>
-                    <p class="text-[10px] text-slate-400 font-medium leading-relaxed">Versi 2.0 • Build Stable <br> SMK Negeri Unggul</p>
+                    <p class="text-[10px] text-slate-400 font-medium leading-relaxed">Versi 2.0 • Build Stable <br> <?= $data['sekolah']['nama_sekolah'] ?? 'BK Online'; ?></p>
                 </div>
             </div>
         </aside>

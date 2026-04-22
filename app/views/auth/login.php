@@ -92,7 +92,8 @@
             </form>
 
             <div class="mt-12 text-center">
-                <p class="text-xs text-slate-400 font-medium">&copy; <?= date('Y'); ?> BK Online</p>
+                <p class="text-xs text-slate-400 font-medium">Versi 2.0 • Build Stable</p>
+                <p class="text-xs text-slate-400 font-medium"><?= $data['sekolah']['nama_sekolah'] ?? 'BK Online'; ?></p>
             </div>
         </div>
     </div>

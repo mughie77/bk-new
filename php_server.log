@@ -1,0 +1,8 @@
+[Wed Apr 22 02:36:12 2026] PHP 8.3.6 Development Server (http://localhost:8000) started
+[Wed Apr 22 02:37:21 2026] [::1]:55816 Accepted
+[Wed Apr 22 02:37:21 2026] PHP Warning:  require_once(../app/core/App.php): Failed to open stream: No such file or directory in /app/public/index.php on line 8
+[Wed Apr 22 02:37:21 2026] PHP Fatal error:  Uncaught Error: Failed opening required '../app/core/App.php' (include_path='.:/usr/share/php') in /app/public/index.php:8
+Stack trace:
+#0 {main}
+  thrown in /app/public/index.php on line 8
+[Wed Apr 22 02:37:21 2026] [::1]:55816 Closing
