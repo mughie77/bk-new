@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @media print {
-            .no-print { display: none; }
+            .no-print { display: none !important; }
             body { padding: 0; margin: 0; }
         }
         body { font-family: 'Times New Roman', Times, serif; }
