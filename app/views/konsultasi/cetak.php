@@ -11,7 +11,8 @@
             .no-print { display: none !important; }
             body { padding: 0; margin: 0; }
         }
-        body { font-family: 'Times New Roman', Times, serif; }
+        body { font-family: 'Times New Roman', Times, serif; color: #000; }
+        table td { padding: 8px !important; }
     </style>
 </head>
 <body class="bg-white p-8">
@@ -47,10 +48,20 @@
         </h2>
     </div>
 
-    <table class="w-full mb-8 border-collapse border border-slate-300">
+    <?php
+        // Tanggal Bahasa Indonesia
+        $hari = ['Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa', 'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'];
+        $bulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'];
+
+        $tgl = strtotime($data['konsultasi']['tanggal']);
+        $hari_id = $hari[date('l', $tgl)];
+        $tgl_id = date('d', $tgl) . ' ' . $bulan[(int)date('m', $tgl)] . ' ' . date('Y', $tgl);
+    ?>
+
+    <table class="w-full mb-8 border-collapse border border-black">
         <tr>
-            <td class="border border-slate-300 p-2 font-bold w-1/4 bg-slate-50">Nama Peserta Didik</td>
-            <td class="border border-slate-300 p-2">
+            <td class="border border-black font-bold w-1/3">1. Nama peserta didik/Konseli</td>
+            <td class="border border-black">
                 <?php if($data['konsultasi']['is_anonim']): ?>
                     <span class="font-mono font-bold"><?= $data['konsultasi']['kode_samaran']; ?></span> (Nama Disamarkan)
                 <?php else: ?>
@@ -59,24 +70,28 @@
             </td>
         </tr>
         <tr>
-            <td class="border border-slate-300 p-2 font-bold bg-slate-50">Kelas / Konsentrasi</td>
-            <td class="border border-slate-300 p-2"><?= $data['konsultasi']['nama_kelas']; ?> / <?= $data['konsultasi']['nama_konsentrasi']; ?></td>
+            <td class="border border-black font-bold">2. Kelas /Semester</td>
+            <td class="border border-black"><?= $data['konsultasi']['nama_kelas']; ?> / <?= $data['pengaturan']['semester']; ?></td>
         </tr>
         <tr>
-            <td class="border border-slate-300 p-2 font-bold bg-slate-50">Hari / Tanggal</td>
-            <td class="border border-slate-300 p-2"><?= date('l, d F Y', strtotime($data['konsultasi']['tanggal'])); ?></td>
+            <td class="border border-black font-bold">3. Hari / Tanggal</td>
+            <td class="border border-black"><?= $hari_id . ', ' . $tgl_id; ?></td>
         </tr>
         <tr>
-            <td class="border border-slate-300 p-2 font-bold bg-slate-50">Durasi</td>
-            <td class="border border-slate-300 p-2"><?= $data['konsultasi']['waktu_menit']; ?> Menit</td>
+            <td class="border border-black font-bold">4. Waktu</td>
+            <td class="border border-black"><?= $data['konsultasi']['waktu_menit']; ?> Menit</td>
         </tr>
         <tr>
-            <td class="border border-slate-300 p-2 font-bold bg-slate-50">Konsultan / Narasumber</td>
-            <td class="border border-slate-300 p-2"><?= $data['konsultasi']['konsultan']; ?></td>
+            <td class="border border-black font-bold">5. Topik pembahasan</td>
+            <td class="border border-black whitespace-pre-wrap leading-relaxed"><?= nl2br($data['konsultasi']['topik']); ?></td>
         </tr>
         <tr>
-            <td class="border border-slate-300 p-2 font-bold bg-slate-50">Topik Pembahasan</td>
-            <td class="border border-slate-300 p-2 h-40 align-top"><?= nl2br($data['konsultasi']['topik']); ?></td>
+            <td class="border border-black font-bold">6. Konsultan / Nara Sumber</td>
+            <td class="border border-black"><?= $data['konsultasi']['konsultan']; ?></td>
+        </tr>
+        <tr>
+            <td class="border border-black font-bold">7. Peran Guru Bimbingan dan Konseling atau Konselor</td>
+            <td class="border border-black"><?= $data['konsultasi']['peran_konselor']; ?></td>
         </tr>
     </table>
 
@@ -90,7 +105,7 @@
             <p>NIP. <?= $data['pengaturan']['nip_kepala_sekolah']; ?></p>
         </div>
         <div class="text-center">
-            <p><?= date('d F Y'); ?></p>
+            <p><?= $tgl_id; ?></p>
             <p>Guru Pembimbing / Konselor</p>
             <br><br><br><br>
             <p class="font-bold underline"><?= $data['konsultasi']['guru_pengampu'] ?? $data['konsultasi']['konsultan']; ?></p>
