@@ -92,7 +92,7 @@
             </form>
 
             <div class="mt-12 text-center">
-                <p class="text-xs text-slate-400 font-medium">&copy; <?= date('Y'); ?> BK Online • SMK Negeri Unggul</p>
+                <p class="text-xs text-slate-400 font-medium">&copy; <?= date('Y'); ?> BK Online</p>
             </div>
         </div>
     </div>
